@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Murmur — local speech-to-text</title>
+  <link rel="stylesheet" href="styles/colors_and_type.css"/>
+  <link rel="stylesheet" href="styles/app.css"/>
+  <link rel="stylesheet" href="styles/proto.css"/>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="stage">
+  <div class="proto-header">
+    <span class="mark"><svg width="26" height="26" viewBox="0 0 64 64" fill="currentColor"><rect x="6" y="26" width="6" height="12" rx="3"/><rect x="18" y="18" width="6" height="28" rx="3"/><rect x="30" y="10" width="6" height="44" rx="3"/><rect x="42" y="18" width="6" height="28" rx="3"/><rect x="54" y="26" width="6" height="12" rx="3"/></svg></span>
+    <div class="col" style="gap:2px">
+      <div class="title">Murmur</div>
+      <div class="sub">speak softly. your voice stays home.</div>
+    </div>
+    <div class="stat">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--ok)"></span>
+      <span>ready · parakeet-v3 · metal</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="waves" aria-hidden="true">
+      <svg viewBox="0 0 2400 240" preserveAspectRatio="none">
+        <path class="w1" d="M0,120 Q150,40 300,120 T600,120 T900,120 T1200,120 T1500,120 T1800,120 T2100,120 T2400,120" stroke="#f0b878" stroke-width="1.5" fill="none"/>
+        <path class="w2" d="M0,120 Q200,180 400,120 T800,120 T1200,120 T1600,120 T2000,120 T2400,120" stroke="#7ec0ff" stroke-width="1" fill="none"/>
+        <path class="w3" d="M0,120 Q100,80 200,120 T400,120 T600,120 T800,120 T1000,120 T1200,120 T1400,120 T1600,120 T1800,120 T2000,120 T2200,120 T2400,120" stroke="#f0b878" stroke-width="0.8" fill="none"/>
+      </svg>
+    </div>
+    <div class="pill"><span class="dot"></span><span>listening locally · on-device</span></div>
+    <h1>local. private. quiet.</h1>
+    <p>hold ⌥, talk, release. nothing leaves your machine.</p>
+    <div class="metrics">
+      <div class="m"><span class="k">model</span><span class="v">parakeet-v3</span></div>
+      <div class="m"><span class="k">latency</span><span class="v signal">42 ms</span></div>
+      <div class="m"><span class="k">accel</span><span class="v">metal</span></div>
+      <div class="m"><span class="k">network</span><span class="v ok">offline</span></div>
+    </div>
+  </div>
+
+  <div id="root"></div>
+</div>
+
+<script type="text/babel" src="components/Atoms.jsx"></script>
+<script type="text/babel" src="components/Overlay.jsx"></script>
+<script type="text/babel" src="components/SettingsPanes.jsx"></script>
+<script type="text/babel" src="components/tweaks-panel.jsx"></script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "showOverlay": true,
+  "overlayCorner": "bottom",
+  "showMenubar": false,
+  "accent": "#f0b878",
+  "demoLine": "the model runs entirely on your machine. nothing is sent anywhere."
+}/*EDITMODE-END*/;
+
+const INITIAL_SETTINGS = {
+  // general
+  launchAtLogin: true, menuBar: true, overlay: true, overlayPos: "bottom-center",
+  audioFeedback: false, muteWhileRecording: true, trailingSpace: true, autoSubmit: false,
+  appLang: "english",
+  // models
+  activeModel: "parakeet-v3-int8", acceleration: "metal", unloadTimeout: "10 min",
+  // shortcuts
+  triggerMode: "hold", globeKey: false,
+  // audio
+  inputDevice: "macbook pro microphone", outputDevice: "system default",
+  clamshellMic: "airpods pro", alwaysOn: false, vad: true, vadThreshold: 55, lazyStream: true,
+  // language
+  lang: "auto",
+  // dictionary
+  words: ["whisper.cpp", "parakeet", "tauri", "rust", "claude", "anthropic", "macOS"],
+  // post-processing
+  postEnabled: false, postStyle: "light", postModel: "llama-3.2-1b",
+  autoPunct: true, stripFiller: true,
+};
+
+const INITIAL_HISTORY = [
+  { time:"2m ago",  app:"Mail",     text:"thanks for sending — i'll take a look tonight." },
+  { time:"7m ago",  app:"Slack",    text:"deploy when ready. ping me if anything breaks." },
+  { time:"22m ago", app:"Notes",    text:"three things to remember: dentist, taxes, mom's birthday." },
+  { time:"1h ago",  app:"VS Code",  text:"todo: refactor the audio pipeline; latency spikes on long recordings." },
+  { time:"yesterday", app:"Messages", text:"on my way. five minutes." },
+];
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [section, setSection] = React.useState("general");
+  const [settings, setSettings] = React.useState(INITIAL_SETTINGS);
+  const [history, setHistory] = React.useState(INITIAL_HISTORY);
+  const [state, setState] = React.useState("idle");
+  const [transcript, setTranscript] = React.useState("");
+  const [elapsed, setElapsed] = React.useState(0);
+  const [downloading, setDownloading] = React.useState(null);
+  const [menubarOpen, setMenubarOpen] = React.useState(false);
+  const [appBodyText, setAppBodyText] = React.useState("");
+
+  const set = (k, v) => setSettings(s => ({ ...s, [k]: v }));
+
+  // simulate elapsed time during listening
+  React.useEffect(() => {
+    if (state !== "listening") return;
+    const start = Date.now();
+    const id = setInterval(() => setElapsed(Math.round((Date.now()-start)/100)), 100);
+    return () => clearInterval(id);
+  }, [state]);
+
+  // type-out animation for paste
+  const typeOut = React.useCallback((text) => {
+    let i = 0;
+    setAppBodyText("");
+    const id = setInterval(() => {
+      i += 2;
+      setAppBodyText(text.slice(0, i));
+      if (i >= text.length) clearInterval(id);
+    }, 18);
+  }, []);
+
+  const runDemo = React.useCallback(() => {
+    const line = t.demoLine || INITIAL_SETTINGS;
+    setTranscript("");
+    setElapsed(0);
+    setState("listening");
+    setTimeout(() => {
+      setState("transcribing");
+      setTranscript(t.demoLine);
+    }, 2200);
+    setTimeout(() => {
+      setState("pasted");
+      typeOut(t.demoLine);
+      setHistory(h => [{ time:"just now", app:"Mail", text: t.demoLine }, ...h].slice(0, 8));
+    }, 3000);
+    setTimeout(() => { setState("idle"); setTranscript(""); }, 4400);
+  }, [t.demoLine, typeOut]);
+
+  const startDownload = (id) => {
+    setDownloading(id);
+    setTimeout(() => setDownloading(null), 2400);
+  };
+
+  const renderPane = () => {
+    switch (section) {
+      case "general":    return <GeneralPane s={settings} set={set}/>;
+      case "models":     return <ModelsPane s={settings} set={set} downloading={downloading} startDownload={startDownload}/>;
+      case "shortcuts":  return <ShortcutsPane s={settings} set={set}/>;
+      case "audio":      return <AudioPane s={settings} set={set}/>;
+      case "language":   return <LanguagePane s={settings} set={set}/>;
+      case "dictionary": return <DictionaryPane s={settings} set={set}
+        addWord={(w) => setSettings(s => ({ ...s, words: [...new Set([...s.words, w])] }))}
+        removeWord={(w) => setSettings(s => ({ ...s, words: s.words.filter(x => x !== w) }))}
+      />;
+      case "post":       return <PostPane s={settings} set={set}/>;
+      case "history":    return <HistoryPane history={history} clear={() => setHistory([])} copy={() => {}}/>;
+      case "about":      return <AboutPane/>;
+      default: return null;
+    }
+  };
+
+  return (
+    <div>
+      {/* desktop simulator */}
+      <div data-screen-label="01 Press to talk" className="desktop-sim">
+        {t.showMenubar && (
+          <div className="desktop-sim__menubar">
+            <span style={{color:"var(--ink)",fontWeight:600}}> Finder</span>
+            <span style={{color:"var(--mute)"}}>File</span>
+            <span style={{color:"var(--mute)"}}>Edit</span>
+            <span style={{color:"var(--mute)"}}>View</span>
+            <span style={{color:"var(--mute)"}}>Go</span>
+            <span style={{color:"var(--mute)"}}>Window</span>
+            <span style={{color:"var(--mute)"}}>Help</span>
+            <div className="right">
+              <button className={"mic " + (state === "listening" ? "is-on" : "")} onClick={() => setMenubarOpen(o => !o)} aria-label="murmur">
+                <Mark size={14} color={state === "listening" ? "var(--signal)" : "currentColor"}/>
+              </button>
+              <span>Wed 3:42 PM</span>
+            </div>
+          </div>
+        )}
+
+        <div className="desktop-sim__app">
+          <div className="pad-text">
+            <h4>compose</h4>
+            <div className="meta">to: riley</div>
+            <div className="body">
+              {appBodyText || <span style={{color:"var(--ash)"}}>place your cursor here, then hold ⌥ and talk.</span>}
+              <span className="cursor"/>
+            </div>
+          </div>
+        </div>
+
+        {t.showOverlay && state !== "idle" && (
+          <div className="desktop-sim__overlay">
+            <TalkOverlay state={state} transcript={transcript} elapsed={elapsed}/>
+          </div>
+        )}
+
+        {menubarOpen && (
+          <div className="desktop-sim__menubar-pop">
+            <div className="murmur-menubar">
+              <div className="murmur-menubar__head">
+                <div className="row" style={{gap:10,alignItems:"center"}}>
+                  <span style={{color:"var(--signal)"}}><Mark size={18}/></span>
+                  <div>
+                    <div className="t-body-strong" style={{color:"var(--ink)"}}>Murmur</div>
+                    <div className="t-caption">ready · parakeet-v3 · metal</div>
+                  </div>
+                </div>
+                <span className="murmur-chip murmur-chip--ok">ready</span>
+              </div>
+              <button className="murmur-menubar__trigger" onClick={() => { setMenubarOpen(false); runDemo(); }}>
+                <Mark size={16}/>
+                <span style={{flex:1,textAlign:"left"}}>hold ⌥ to talk</span>
+                <Keycap>⌥</Keycap>
+              </button>
+              <div className="murmur-menubar__section">
+                <div className="t-caption-sm" style={{padding:"4px 12px"}}>recent</div>
+                {history.slice(0,3).map((h,i) => (
+                  <div className="murmur-menubar__row" key={i}>
+                    <div className="t-body-sm" style={{color:"var(--ink)",flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{h.text}</div>
+                    <span className="t-caption">{h.time}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="murmur-menubar__foot">
+                <button className="murmur-btn murmur-btn--ghost" onClick={() => { setMenubarOpen(false); setSection("general"); document.getElementById("settings")?.scrollIntoView({block:"start",behavior:"smooth"}); }} style={{height:28,padding:"0 10px",fontSize:13}}>settings…</button>
+                <button className="murmur-btn murmur-btn--ghost" style={{height:28,padding:"0 10px",fontSize:13}}>quit</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="sim-controls">
+        <button className="murmur-btn murmur-btn--primary" onClick={runDemo}>
+          <Lucide name="play" size={14}/><span style={{marginLeft:6}}>simulate dictation</span>
+        </button>
+        <button className="murmur-btn murmur-btn--tertiary" onClick={() => setState("idle")}>idle</button>
+        <button className="murmur-btn murmur-btn--tertiary" onClick={() => setState("listening")}>listening</button>
+        <button className="murmur-btn murmur-btn--tertiary" onClick={() => setState("transcribing")}>transcribing</button>
+        <button className="murmur-btn murmur-btn--tertiary" onClick={() => { setState("pasted"); typeOut(t.demoLine); }}>pasted</button>
+        <button className="murmur-btn murmur-btn--ghost" onClick={() => setMenubarOpen(o => !o)}>{menubarOpen ? "close menu" : "open menu"}</button>
+      </div>
+
+      {/* settings window */}
+      <div id="settings" data-screen-label="02 Settings" style={{marginTop:48}}>
+        <div className="t-caption-sm" style={{textAlign:"center",marginBottom:14}}>settings · ⌘ ,</div>
+
+        <div
+          className="murmur-window"
+          ref={el => {
+            if (!el || el.__wired) return;
+            el.__wired = true;
+            const onMove = (e) => {
+              const r = el.getBoundingClientRect();
+              el.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100) + "%");
+              el.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100) + "%");
+            };
+            el.addEventListener("mousemove", onMove);
+            el.addEventListener("mouseenter", () => el.classList.add("is-hover"));
+            el.addEventListener("mouseleave", () => el.classList.remove("is-hover"));
+          }}
+        >
+          <div className="murmur-window__chrome">
+            <div className="row-l">
+              <div className="murmur-window__lights">
+                <span style={{background:"#ff5f57"}}/>
+                <span style={{background:"#febc2e"}}/>
+                <span style={{background:"#28c840"}}/>
+              </div>
+            </div>
+            <div className="row-c">
+              <span className="murmur-window__title"><span className="dot"></span>Murmur — settings</span>
+            </div>
+            <div className="row-r">
+              <div className="murmur-window__search"><Lucide name="search" size={12}/><span>search settings</span><span className="kbd">⌘ k</span></div>
+            </div>
+          </div>
+          <div className="murmur-window__body">
+            <aside
+              className="murmur-window__side col"
+              ref={el => {
+                if (!el) return;
+                const active = el.querySelector(".murmur-tab.is-active");
+                const ind = el.querySelector(".tab-indicator");
+                if (active && ind) {
+                  ind.style.transform = `translateY(${active.offsetTop - 10}px)`;
+                  ind.style.opacity = "1";
+                }
+              }}
+              onMouseLeave={e => {
+                const aside = e.currentTarget;
+                const active = aside.querySelector(".murmur-tab.is-active");
+                const ind = aside.querySelector(".tab-indicator");
+                if (active && ind) ind.style.transform = `translateY(${active.offsetTop - 10}px)`;
+              }}
+            >
+              <div className="tab-indicator" style={{opacity:0}}/>
+              <div className="sidebar-head">
+                <span className="icon-wrap"><Mark size={16}/></span>
+                <div className="col" style={{gap:2,minWidth:0}}>
+                  <div className="nm">Murmur</div>
+                  <div className="st">0.8.1 · ready</div>
+                </div>
+              </div>
+              {SECTIONS.map(sec => (
+                <button
+                  key={sec.id}
+                  className={"murmur-tab " + (section === sec.id ? "is-active" : "")}
+                  onClick={() => setSection(sec.id)}
+                  onMouseEnter={e => {
+                    const aside = e.currentTarget.closest(".murmur-window__side");
+                    const ind = aside?.querySelector(".tab-indicator");
+                    if (ind) {
+                      ind.style.transform = `translateY(${e.currentTarget.offsetTop - 10}px)`;
+                      ind.style.opacity = "1";
+                    }
+                  }}
+                >
+                  <span className="murmur-tab__glyph"><Lucide name={sec.icon} size={15}/></span>
+                  <span>{sec.label}</span>
+                </button>
+              ))}
+              <div className="sidebar-foot">
+                <span className="ver">v0.8.1 · BUILD 0511</span>
+                <button className="murmur-icon-btn" title="quit"><Lucide name="x" size={14}/></button>
+              </div>
+            </aside>
+            <main className="murmur-window__main">
+              <div key={section} className="pane-fade">{renderPane()}</div>
+            </main>
+          </div>
+        </div>
+      </div>
+
+      <div className="proto-footer">
+        <div className="row" style={{gap:14,alignItems:"center"}}>
+          <span style={{color:"var(--signal)"}}><Mark size={14}/></span>
+          <span>Murmur · local speech-to-text</span>
+        </div>
+        <div className="row" style={{gap:14}}>
+          <span>open source · mit</span>
+          <span style={{color:"var(--ash)"}}>·</span>
+          <span>nothing leaves your machine</span>
+        </div>
+      </div>
+
+      {/* tweaks */}
+      <TweaksPanel title="Tweaks">
+        <TweakSection title="Desktop sim">
+          <TweakToggle label="show menu bar" value={t.showMenubar} onChange={v => setTweak("showMenubar", v)}/>
+          <TweakToggle label="show overlay when active" value={t.showOverlay} onChange={v => setTweak("showOverlay", v)}/>
+          <TweakText label="demo line" value={t.demoLine} onChange={v => setTweak("demoLine", v)}/>
+        </TweakSection>
+        <TweakSection title="Brand">
+          <TweakColor
+            label="signal color"
+            value={t.accent}
+            options={["#f0b878","#7ec0ff","#6fcf9c","#c89aff","#ff9580"]}
+            onChange={v => {
+              setTweak("accent", v);
+              document.documentElement.style.setProperty("--signal", v);
+              document.documentElement.style.setProperty("--signal-soft", v + "29");
+            }}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+
+</body>
+</html>
