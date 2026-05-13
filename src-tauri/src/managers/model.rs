@@ -17,6 +17,11 @@ use std::time::{Duration, Instant};
 use tar::Archive;
 use tauri::{AppHandle, Emitter, Manager};
 
+// Model download host. The `blob.handy.computer` domain is upstream Handy
+// infrastructure that Murmur temporarily relies on for hosting model blobs;
+// it is an upstream implementation detail, not Murmur branding. Replacing it
+// with Murmur-owned hosting is tracked separately and is out of scope here.
+
 #[derive(Debug, Clone, Serialize, Deserialize, Type)]
 pub enum EngineType {
     Whisper,

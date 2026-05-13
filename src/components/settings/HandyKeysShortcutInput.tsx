@@ -81,7 +81,7 @@ export const HandyKeysShortcutInput: React.FC<HandyKeysShortcutInputProps> = ({
     const setupListener = async () => {
       // Listen for key events from backend
       const unlisten = await listen<HandyKeysEvent>(
-        "handy-keys-event",
+        "murmur-keys-event",
         async (event) => {
           if (cleanup) return;
 
