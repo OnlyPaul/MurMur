@@ -65,9 +65,7 @@ export const AboutSettings: React.FC = () => {
           grouped={true}
           layout="stacked"
         >
-          <div className="text-sm text-mid-gray">
-            {t("settings.about.fork.details")}
-          </div>
+          <div className="t-caption">{t("settings.about.fork.details")}</div>
         </SettingContainer>
       </SettingsGroup>
 
@@ -78,7 +76,7 @@ export const AboutSettings: React.FC = () => {
           grouped={true}
           layout="stacked"
         >
-          <div className="text-sm text-mid-gray">
+          <div className="t-caption">
             {t("settings.about.acknowledgments.whisper.details")}
           </div>
         </SettingContainer>
