@@ -1,37 +1,35 @@
 ---
 name: Bug Report
-about: Create a report to help us improve Handy
-title: "[BUG] "
+about: Report something that's broken in Murmur
+title: "[bug] "
 labels: ["bug"]
 assignees: ""
 ---
 
-## Before You Submit
+## Before you submit
 
-**Please search [existing issues](https://github.com/cjpais/Handy/issues) to avoid duplicates.** Your bug may already be reported! Right now it's just me maintaining this project so many issues can be overwhelming! Help me out by checking first.
+Please search [existing issues](https://github.com/OnlyPaul/MurMur/issues?q=is%3Aissue) first to avoid duplicates.
 
-## Bug Description
+## What's wrong
 
-A clear and concise description of what the bug is.
+A clear, concise description of the bug.
 
-## System Information
+## Steps to reproduce
 
-**App Version:**
+1.
+2.
+3.
 
-<!-- You can find this in the app settings or about section -->
+**Expected:**
 
-**Operating System:**
+**Actual:**
 
-<!-- e.g., macOS 14.1, Windows 11, Ubuntu 22.04 -->
+## System info
 
-**CPU:**
-
-<!-- e.g., Apple M2, Intel i7-12700K, AMD Ryzen 7 5800X -->
-
-**GPU:**
-
-<!-- e.g., Apple M2 GPU, NVIDIA RTX 4080, AMD RX 6800 XT, Intel UHD Graphics -->
+- **Murmur version:** <!-- Settings → About -->
+- **OS:** <!-- e.g. macOS 14.4 -->
+- **CPU / GPU:** <!-- e.g. Apple M2 Pro -->
 
 ## Logs
 
-<!-- Please attach relevant logs to help us diagnose the issue. You can find the log directory by going to Settings > About in the app. -->
+<!-- Attach logs from the app data directory (Settings → About → App Data Directory) if relevant. -->
