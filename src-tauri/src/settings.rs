@@ -163,6 +163,11 @@ pub enum RecordingRetentionPeriod {
     Months3,
 }
 
+/// Which keyboard shortcut backend Murmur uses.
+///
+/// The `HandyKeys` variant identifies the upstream `handy-keys` crate
+/// (https://crates.io/crates/handy-keys) that Murmur wraps; the variant name
+/// reflects that third-party crate's identity rather than Murmur branding.
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Type)]
 #[serde(rename_all = "snake_case")]
 pub enum KeyboardImplementation {

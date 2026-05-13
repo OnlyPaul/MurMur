@@ -10,6 +10,15 @@ use std::path::PathBuf;
 use tauri::AppHandle;
 use tauri_specta::Event;
 
+/// Filename prefix for first-party generated recording WAV files.
+/// Belongs to the Murmur namespace; no Handy aliases.
+pub const RECORDING_FILENAME_PREFIX: &str = "murmur";
+
+/// Generate the canonical Murmur recording filename for a given UTC timestamp.
+pub fn recording_filename(timestamp: i64) -> String {
+    format!("{}-{}.wav", RECORDING_FILENAME_PREFIX, timestamp)
+}
+
 /// Database migrations for transcription history.
 /// Each migration is applied in order. The library tracks which migrations
 /// have been applied using SQLite's user_version pragma.
@@ -686,7 +695,7 @@ mod tests {
                 post_process_requested
             ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
             params![
-                format!("handy-{}.wav", timestamp),
+                recording_filename(timestamp),
                 timestamp,
                 false,
                 format!("Recording {}", timestamp),
@@ -733,5 +742,17 @@ mod tests {
 
         assert_eq!(entry.timestamp, 100);
         assert_eq!(entry.transcription_text, "completed");
+    }
+
+    #[test]
+    fn recording_filename_uses_murmur_namespace() {
+        assert_eq!(recording_filename(1700000000), "murmur-1700000000.wav");
+        assert!(recording_filename(42).starts_with("murmur-"));
+        assert!(!recording_filename(42).starts_with("handy-"));
+    }
+
+    #[test]
+    fn recording_filename_prefix_constant() {
+        assert_eq!(RECORDING_FILENAME_PREFIX, "murmur");
     }
 }

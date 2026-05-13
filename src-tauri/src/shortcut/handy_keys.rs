@@ -1,7 +1,12 @@
-//! Handy-keys based keyboard shortcut implementation
+//! Murmur keyboard shortcut implementation backed by the upstream `handy-keys` crate.
 //!
 //! This module provides an alternative to Tauri's global-shortcut plugin
-//! using the handy-keys library for more control over keyboard events.
+//! using the upstream `handy-keys` library (https://crates.io/crates/handy-keys)
+//! for more control over keyboard events. The `handy_keys` module name and the
+//! `KeyboardImplementation::HandyKeys` enum variant intentionally mirror the
+//! third-party crate identity; they are upstream implementation details, not
+//! Murmur branding. The frontend-facing event is emitted under the Murmur
+//! namespace as `murmur-keys-event`.
 //!
 //! ## Architecture
 //!
@@ -323,7 +328,7 @@ impl HandyKeysState {
                 };
 
                 // Emit to frontend
-                if let Err(e) = app.emit("handy-keys-event", &frontend_event) {
+                if let Err(e) = app.emit("murmur-keys-event", &frontend_event) {
                     error!("Failed to emit key event: {}", e);
                 }
             } else {

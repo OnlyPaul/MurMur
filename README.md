@@ -427,12 +427,12 @@ Handy uses `gtk-layer-shell` for its recording overlay and links against it at r
 
 If it is already installed and you still see startup problems, try reinstalling it (e.g. `sudo pacman -S gtk-layer-shell` again) in case the library files were corrupted by a partial upgrade.
 
-**2. Disable the GTK layer shell overlay (`HANDY_NO_GTK_LAYER_SHELL`)**
+**2. Disable the GTK layer shell overlay (`MURMUR_NO_GTK_LAYER_SHELL`)**
 
 If installing the library does not help, you can skip `gtk-layer-shell` initialization entirely as a workaround. On some compositors (notably KDE Plasma under Wayland) it has been reported to interact poorly with the recording overlay. With this variable set, the overlay falls back to a regular always-on-top window:
 
 ```bash
-HANDY_NO_GTK_LAYER_SHELL=1 handy
+MURMUR_NO_GTK_LAYER_SHELL=1 murmur
 ```
 
 **3. Disable WebKit DMA-BUF renderer (`WEBKIT_DISABLE_DMABUF_RENDERER`)**
@@ -440,7 +440,7 @@ HANDY_NO_GTK_LAYER_SHELL=1 handy
 On some GPU/driver combinations the WebKitGTK DMA-BUF renderer can cause the window to fail to render or to crash. Try:
 
 ```bash
-WEBKIT_DISABLE_DMABUF_RENDERER=1 handy
+WEBKIT_DISABLE_DMABUF_RENDERER=1 murmur
 ```
 
 **Making a workaround permanent**
@@ -448,7 +448,7 @@ WEBKIT_DISABLE_DMABUF_RENDERER=1 handy
 Once you've found a flag that helps, export it from your shell profile (`~/.bashrc`, `~/.zshenv`, …) or from the desktop autostart entry that launches Handy. If you launch Handy from a `.desktop` file, you can prefix the `Exec=` line, e.g.:
 
 ```ini
-Exec=env HANDY_NO_GTK_LAYER_SHELL=1 handy
+Exec=env MURMUR_NO_GTK_LAYER_SHELL=1 murmur
 ```
 
 If a workaround helps you, please [open an issue](https://github.com/cjpais/Handy/issues) describing your distro, desktop environment, and session type — that information helps us narrow down the underlying bug.
