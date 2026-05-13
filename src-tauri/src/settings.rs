@@ -163,6 +163,11 @@ pub enum RecordingRetentionPeriod {
     Months3,
 }
 
+/// Which keyboard shortcut backend Murmur uses.
+///
+/// The `HandyKeys` variant identifies the upstream `handy-keys` crate
+/// (https://crates.io/crates/handy-keys) that Murmur wraps; the variant name
+/// reflects that third-party crate's identity rather than Murmur branding.
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Type)]
 #[serde(rename_all = "snake_case")]
 pub enum KeyboardImplementation {
@@ -347,8 +352,6 @@ pub struct AppSettings {
     pub start_hidden: bool,
     #[serde(default = "default_autostart_enabled")]
     pub autostart_enabled: bool,
-    #[serde(default = "default_update_checks_enabled")]
-    pub update_checks_enabled: bool,
     #[serde(default = "default_model")]
     pub selected_model: String,
     #[serde(default = "default_always_on_microphone")]
@@ -450,10 +453,6 @@ fn default_start_hidden() -> bool {
 
 fn default_autostart_enabled() -> bool {
     false
-}
-
-fn default_update_checks_enabled() -> bool {
-    true
 }
 
 fn default_selected_language() -> String {
@@ -772,7 +771,6 @@ pub fn get_default_settings() -> AppSettings {
         sound_theme: default_sound_theme(),
         start_hidden: default_start_hidden(),
         autostart_enabled: default_autostart_enabled(),
-        update_checks_enabled: default_update_checks_enabled(),
         selected_model: "".to_string(),
         always_on_microphone: false,
         selected_microphone: None,

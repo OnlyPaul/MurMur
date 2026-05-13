@@ -44,21 +44,28 @@ pub fn get_current_theme(app: &AppHandle) -> AppTheme {
     }
 }
 
-/// Gets the appropriate icon path for the given theme and state
+/// Gets the appropriate icon path for the given theme and state.
+///
+/// All three states render the same Murmur mark — only the emphasis
+/// (fill opacity / accent tint) changes between Idle, Transcribing, and
+/// Recording. See `scripts/generate-brand-assets.ts` for the pipeline that
+/// produces these PNGs from the canonical SVG mark.
 pub fn get_icon_path(theme: AppTheme, state: TrayIconState) -> &'static str {
     match (theme, state) {
-        // Dark theme uses light icons
+        // Dark UI → light template mark
         (AppTheme::Dark, TrayIconState::Idle) => "resources/tray_idle.png",
         (AppTheme::Dark, TrayIconState::Recording) => "resources/tray_recording.png",
         (AppTheme::Dark, TrayIconState::Transcribing) => "resources/tray_transcribing.png",
-        // Light theme uses dark icons
+        // Light UI → dark template mark
         (AppTheme::Light, TrayIconState::Idle) => "resources/tray_idle_dark.png",
         (AppTheme::Light, TrayIconState::Recording) => "resources/tray_recording_dark.png",
         (AppTheme::Light, TrayIconState::Transcribing) => "resources/tray_transcribing_dark.png",
-        // Colored theme uses pink icons (for Linux)
-        (AppTheme::Colored, TrayIconState::Idle) => "resources/handy.png",
-        (AppTheme::Colored, TrayIconState::Recording) => "resources/recording.png",
-        (AppTheme::Colored, TrayIconState::Transcribing) => "resources/transcribing.png",
+        // Colored variant (Linux) → accent-tinted mark, same emphasis ramp
+        (AppTheme::Colored, TrayIconState::Idle) => "resources/tray_idle_colored.png",
+        (AppTheme::Colored, TrayIconState::Recording) => "resources/tray_recording_colored.png",
+        (AppTheme::Colored, TrayIconState::Transcribing) => {
+            "resources/tray_transcribing_colored.png"
+        }
     }
 }
 
@@ -87,9 +94,9 @@ pub fn tray_tooltip() -> String {
 
 fn version_label() -> String {
     if cfg!(debug_assertions) {
-        format!("Handy v{} (Dev)", env!("CARGO_PKG_VERSION"))
+        format!("Murmur v{} (Dev)", env!("CARGO_PKG_VERSION"))
     } else {
-        format!("Handy v{}", env!("CARGO_PKG_VERSION"))
+        format!("Murmur v{}", env!("CARGO_PKG_VERSION"))
     }
 }
 
@@ -117,14 +124,6 @@ pub fn update_tray_menu(app: &AppHandle, state: &TrayIconState, locale: Option<&
         settings_accelerator,
     )
     .expect("failed to create settings item");
-    let check_updates_i = MenuItem::with_id(
-        app,
-        "check_updates",
-        &strings.check_updates,
-        settings.update_checks_enabled,
-        None::<&str>,
-    )
-    .expect("failed to create check updates item");
     let copy_last_transcript_i = MenuItem::with_id(
         app,
         "copy_last_transcript",
@@ -191,7 +190,6 @@ pub fn update_tray_menu(app: &AppHandle, state: &TrayIconState, locale: Option<&
                     &copy_last_transcript_i,
                     &separator(),
                     &settings_i,
-                    &check_updates_i,
                     &separator(),
                     &quit_i,
                 ],
@@ -209,7 +207,6 @@ pub fn update_tray_menu(app: &AppHandle, state: &TrayIconState, locale: Option<&
                 &unload_model_i,
                 &separator(),
                 &settings_i,
-                &check_updates_i,
                 &separator(),
                 &quit_i,
             ],
@@ -272,13 +269,23 @@ pub fn copy_last_transcript(app: &AppHandle) {
 
 #[cfg(test)]
 mod tests {
-    use super::last_transcript_text;
+    use super::{last_transcript_text, version_label};
     use crate::managers::history::HistoryEntry;
+
+    #[test]
+    fn version_label_uses_murmur_branding() {
+        let label = version_label();
+        assert!(
+            label.starts_with("Murmur v"),
+            "expected Murmur branding, got: {label}"
+        );
+        assert!(!label.contains("Handy"));
+    }
 
     fn build_entry(transcription: &str, post_processed: Option<&str>) -> HistoryEntry {
         HistoryEntry {
             id: 1,
-            file_name: "handy-1.wav".to_string(),
+            file_name: "murmur-1.wav".to_string(),
             timestamp: 0,
             saved: false,
             title: "Recording".to_string(),

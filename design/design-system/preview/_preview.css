@@ -1,0 +1,25 @@
+/* Preview-card shared styles. Each card HTML imports this + ../colors_and_type.css. */
+html, body {
+  background: var(--canvas);
+  color: var(--body);
+  margin: 0;
+  font-family: var(--font-sans);
+  font-feature-settings: var(--feat);
+}
+body {
+  padding: 24px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+.card-wrap { width: 100%; }
+.row { display: flex; align-items: center; gap: 16px; }
+.col { display: flex; flex-direction: column; gap: 12px; }
+.muted { color: var(--mute); font: 400 12px/1.4 var(--font-sans); letter-spacing: 0.3px; }
+.label { color: var(--mute); font: 500 11px/1.2 var(--font-sans); letter-spacing: 0.6px; text-transform: uppercase; }
+.swatch { width: 56px; height: 56px; border-radius: 8px; border: 1px solid var(--hairline); flex: none; }
+.swatch.lg { width: 88px; height: 64px; }
+.hex { font: 400 12px/1.2 var(--font-mono); color: var(--mute); }
+.name { font: 500 13px/1.2 var(--font-sans); color: var(--ink); }
+.divider { height: 1px; background: var(--hairline); width: 100%; }

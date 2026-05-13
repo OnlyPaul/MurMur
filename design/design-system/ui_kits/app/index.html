@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Murmur — App UI kit</title>
+  <link rel="stylesheet" href="../../colors_and_type.css"/>
+  <link rel="stylesheet" href="app.css"/>
+  <style>
+    body {
+      min-height:100vh;
+      background:
+        radial-gradient(60% 50% at 50% 30%, rgba(240,184,120,0.05), transparent 70%),
+        var(--canvas);
+      padding:32px;
+    }
+    [data-screen-label] { scroll-margin-top:32px; }
+    .stage {
+      display:grid; grid-template-columns: 360px 1fr; gap:24px;
+      max-width:1180px; margin:0 auto;
+    }
+    .menubar-col { display:flex; flex-direction:column; gap:16px; }
+    .desktop-col { position:relative; min-height:560px; }
+    .menubar-bar {
+      display:flex; align-items:center; gap:14px;
+      padding:6px 14px; height:28px;
+      background:rgba(20,22,26,0.78);
+      backdrop-filter:blur(12px);
+      border:1px solid var(--hairline);
+      border-radius:8px;
+      font:500 12px/1 var(--font-sans); color:var(--ink); letter-spacing:0.1px;
+    }
+    .menubar-bar .right { margin-left:auto; display:flex; gap:14px; align-items:center; color:var(--body); }
+    .menubar-bar .mic-glyph { color:var(--signal); display:inline-flex; }
+    .desktop {
+      position:relative;
+      height:600px;
+      background:
+        linear-gradient(180deg, #0b0e14 0%, #0a0c10 100%);
+      border:1px solid var(--hairline);
+      border-radius:14px;
+      overflow:hidden;
+    }
+    .desktop__app {
+      position:absolute; left:24px; top:60px;
+    }
+    .desktop__overlay {
+      position:absolute; left:50%; top:62%;
+      transform:translate(-50%, -50%);
+    }
+    .desktop__caption {
+      position:absolute; left:0; right:0; bottom:14px;
+      text-align:center; color:var(--mute); font:400 12px/1.4 var(--font-sans);
+    }
+    .pad-text {
+      width:520px; background:var(--surface); border:1px solid var(--hairline);
+      border-radius:10px; padding:16px 18px;
+    }
+    .pad-text h4 { margin:0 0 8px; color:var(--ink); }
+    .pad-text p  { margin:0 0 10px; color:var(--body); font-size:14px; }
+    .cursor { display:inline-block; width:2px; height:1.1em; background:var(--ink); vertical-align:-2px; animation: blink 1s steps(2) infinite; }
+    @keyframes blink { 50% { opacity:0; } }
+
+    .kit-header {
+      max-width:1180px; margin:0 auto 24px;
+      display:flex; align-items:center; gap:14px;
+    }
+    .kit-header__mark { color:var(--ink); display:inline-flex; }
+    .kit-header__title { font:600 20px/1 var(--font-sans); color:var(--ink); letter-spacing:-0.1px; }
+    .kit-header__sub   { color:var(--mute); font-size:13px; }
+
+    .menubar-dropdown-wrap {
+      position:relative;
+    }
+    .menubar-dropdown-wrap::before {
+      content:""; position:absolute; left:24px; top:-6px;
+      width:12px; height:12px; transform:rotate(45deg);
+      background:var(--surface); border-left:1px solid var(--hairline); border-top:1px solid var(--hairline);
+    }
+  </style>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="kit-header">
+  <span class="kit-header__mark">
+    <svg width="22" height="22" viewBox="0 0 64 64" fill="currentColor"><rect x="6" y="26" width="6" height="12" rx="3"/><rect x="18" y="18" width="6" height="28" rx="3"/><rect x="30" y="10" width="6" height="44" rx="3"/><rect x="42" y="18" width="6" height="28" rx="3"/><rect x="54" y="26" width="6" height="12" rx="3"/></svg>
+  </span>
+  <span class="kit-header__title">Murmur — app</span>
+  <span class="kit-header__sub">menu-bar dropdown · press-to-talk overlay · settings</span>
+</div>
+
+<div id="root"></div>
+
+<script type="text/babel" src="Mark.jsx"></script>
+<script type="text/babel" src="TalkOverlay.jsx"></script>
+<script type="text/babel" src="MenubarDropdown.jsx"></script>
+<script type="text/babel" src="SettingsWindow.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  const [state, setState] = React.useState("listening"); // idle | listening | transcribing | pasted
+  const [tab, setTab] = React.useState("model");
+  const [history, setHistory] = React.useState([
+    { time:"2m ago",  text:"thanks for sending — i'll take a look tonight." },
+    { time:"7m ago",  text:"deploy when ready. ping me if anything breaks." },
+    { time:"22m ago", text:"three things: dentist, taxes, mom's birthday." },
+  ]);
+  const transcripts = {
+    listening:    "hold ⌥, talk, release. that's it.",
+    transcribing: "hold ⌥, talk, release. that's it.",
+    pasted:       "hold ⌥, talk, release. that's it.",
+    idle:         "",
+  };
+
+  const trigger = () => {
+    setState("listening");
+    setTimeout(() => setState("transcribing"), 1800);
+    setTimeout(() => {
+      setState("pasted");
+      setHistory(h => [{ time:"just now", text:"hold ⌥, talk, release. that's it." }, ...h]);
+    }, 2400);
+    setTimeout(() => setState("idle"), 3600);
+  };
+
+  return (
+    <div data-screen-label="01 App stage">
+      <div className="stage">
+
+        <div className="menubar-col">
+          <div className="t-caption-sm">menu bar</div>
+          <div className="menubar-bar">
+            <span style={{color:"var(--mute)"}}> Finder</span>
+            <span style={{color:"var(--mute)"}}>File</span>
+            <span style={{color:"var(--mute)"}}>Edit</span>
+            <span style={{color:"var(--mute)"}}>View</span>
+            <div className="right">
+              <span className="mic-glyph">
+                <svg width="14" height="14" viewBox="0 0 64 64" fill="currentColor"><rect x="6" y="26" width="6" height="12" rx="3"/><rect x="18" y="18" width="6" height="28" rx="3"/><rect x="30" y="10" width="6" height="44" rx="3"/><rect x="42" y="18" width="6" height="28" rx="3"/><rect x="54" y="26" width="6" height="12" rx="3"/></svg>
+              </span>
+              <span>Wed 3:42 PM</span>
+            </div>
+          </div>
+
+          <div className="t-caption-sm" style={{marginTop:6}}>menu-bar dropdown</div>
+          <div className="menubar-dropdown-wrap">
+            <MenubarDropdown
+              onOpenSettings={() => { setTab("model"); document.getElementById("settings").scrollIntoView({block:"start"}); }}
+              onTrigger={trigger}
+              history={history}
+            />
+          </div>
+        </div>
+
+        <div className="desktop-col">
+          <div className="t-caption-sm" style={{marginBottom:8}}>press-to-talk overlay (over any app)</div>
+          <div className="desktop">
+            <div className="desktop__app">
+              <div className="pad-text">
+                <h4>compose</h4>
+                <p>to:  riley</p>
+                <p style={{color:"var(--ink)"}}>{transcripts[state]}<span className="cursor"/></p>
+              </div>
+            </div>
+            <div className="desktop__overlay">
+              <TalkOverlay state={state} transcript={transcripts[state] || ""}/>
+            </div>
+            <div className="desktop__caption">
+              the overlay floats above your active app. nothing leaves your machine.
+            </div>
+          </div>
+
+          <div className="row" style={{gap:8, marginTop:14}}>
+            <button className="murmur-btn murmur-btn--tertiary" onClick={() => setState("idle")}>idle</button>
+            <button className="murmur-btn murmur-btn--tertiary" onClick={() => setState("listening")}>listening</button>
+            <button className="murmur-btn murmur-btn--tertiary" onClick={() => setState("transcribing")}>transcribing</button>
+            <button className="murmur-btn murmur-btn--tertiary" onClick={() => setState("pasted")}>pasted</button>
+            <button className="murmur-btn murmur-btn--primary" onClick={trigger}>simulate</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="settings" style={{maxWidth:1180, margin:"56px auto 0"}}>
+        <div className="t-caption-sm" style={{marginBottom:10}}>settings window</div>
+        <SettingsWindow tab={tab} onTab={setTab}/>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

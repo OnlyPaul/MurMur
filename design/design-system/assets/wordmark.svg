@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" fill="none">
+  
+  <g transform="translate(0 12)" fill="#f4f4f6">
+    <rect x="0" y="14" width="4" height="8" rx="2"></rect>
+    <rect x="8" y="9" width="4" height="18" rx="2"></rect>
+    <rect x="16" y="3" width="4" height="30" rx="2"></rect>
+    <rect x="24" y="9" width="4" height="18" rx="2"></rect>
+    <rect x="32" y="14" width="4" height="8" rx="2"></rect>
+  </g>
+  <text x="52" y="38" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="32" letter-spacing="-0.5" fill="#f4f4f6" style="font-feature-settings:&#39;ss03&#39;">Murmur</text>
+</svg>

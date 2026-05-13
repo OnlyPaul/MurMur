@@ -1,46 +1,69 @@
 @import "tailwindcss";
+@import "./styles/murmur/tokens.css";
+@import "./styles/murmur/atoms.css";
 
 @theme {
-  /* Design tokens */
-  --color-text: #0f0f0f;
-  --color-background: #fbfbfb;
-  --color-background-ui: #da5893;
-  --color-logo-primary: #faa2ca;
-  --color-logo-stroke: #382731;
-  --color-text-stroke: #f6f6f6;
-  --color-mid-gray: #808080;
+  /* Murmur tokens exposed as Tailwind colors */
+  --color-canvas: #08090b;
+  --color-surface: #0e0f12;
+  --color-surface-elevated: #14161a;
+  --color-surface-card: #181a1f;
+  --color-hairline: #23262c;
+  --color-hairline-strong: rgba(255, 255, 255, 0.14);
+  --color-hairline-soft: rgba(255, 255, 255, 0.07);
+  --color-ink: #f4f4f6;
+  --color-body: #cdcdd2;
+  --color-mute: #9b9da2;
+  --color-ash: #6a6c72;
+  --color-stone: #43454a;
+  --color-signal: #f0b878;
+  --color-signal-soft: rgba(240, 184, 120, 0.16);
+  --color-signal-pressed: #d8a262;
+  --color-ok: #6fcf9c;
+  --color-err: #ff7a7a;
+  --color-info: #7ec0ff;
+  --color-primary: #ffffff;
+  --color-on-primary: #000000;
 }
 
 :root {
-  /* Typography */
   font-size: 15px;
   line-height: 24px;
   font-weight: 400;
 
-  /* Colors - Light Theme */
-  /* --color-text: #0f0f0f;
-  --color-background: #fbfbfb;
-  --color-logo-primary: #FAA2CA;
-  --color-logo-stroke: #382731;
-  --color-text-stroke: #f6f6f6; */
-
-  /* Typography settings */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  --scrollbar-thumb: color-mix(in srgb, var(--color-text), transparent 85%);
+  /* Reserves vertical space for the macOS traffic lights when the
+     main window uses TitleBarStyle::Overlay. 0 on Win/Linux. */
+  --titlebar-inset: 0px;
+
+  --scrollbar-thumb: color-mix(in srgb, var(--color-ink), transparent 85%);
   --scrollbar-thumb-hover: color-mix(
     in srgb,
-    var(--color-text),
+    var(--color-ink),
     transparent 70%
   );
 
-  /* Apply colors */
-  color: var(--color-text);
-  background-color: var(--color-background);
+  color: var(--color-ink);
+  background-color: var(--color-canvas);
+}
+
+body {
+  background-color: var(--color-canvas);
+}
+
+:root[data-platform="macos"] {
+  --titlebar-inset: 28px;
+}
+
+.titlebar-spacer {
+  flex-shrink: 0;
+  width: 100%;
+  height: var(--titlebar-inset);
 }
 
 .container {
@@ -50,16 +73,6 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Colors - Dark Theme */
-    --color-text: #fbfbfb;
-    --color-background: #2c2b29;
-    --color-logo-primary: #f28cbb;
-    --color-logo-stroke: #fad1ed;
-  }
 }
 
 /* macOS - tint native overlay scrollbar thumb */
@@ -93,16 +106,6 @@
 
 @layer utilities {
   .text-stroke {
-    -webkit-text-stroke: 2px var(--color-text-stroke);
+    -webkit-text-stroke: 2px var(--color-canvas);
   }
-}
-
-.logo-primary {
-  fill: var(--color-logo-primary);
-}
-
-.logo-stroke {
-  fill: var(--color-logo-stroke);
-  stroke: var(--color-logo-stroke);
-  stroke-width: 1;
 }

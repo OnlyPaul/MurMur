@@ -240,11 +240,27 @@ function App() {
   }
 
   if (onboardingStep === "accessibility") {
-    return <AccessibilityOnboarding onComplete={handleAccessibilityComplete} />;
+    return (
+      <>
+        <div
+          className="titlebar-spacer fixed top-0 left-0 right-0 z-50"
+          data-tauri-drag-region
+        />
+        <AccessibilityOnboarding onComplete={handleAccessibilityComplete} />
+      </>
+    );
   }
 
   if (onboardingStep === "model") {
-    return <Onboarding onModelSelected={handleModelSelected} />;
+    return (
+      <>
+        <div
+          className="titlebar-spacer fixed top-0 left-0 right-0 z-50"
+          data-tauri-drag-region
+        />
+        <Onboarding onModelSelected={handleModelSelected} />
+      </>
+    );
   }
 
   return (
@@ -252,15 +268,16 @@ function App() {
       dir={direction}
       className="h-screen flex flex-col select-none cursor-default"
     >
+      <div className="titlebar-spacer" data-tauri-drag-region />
       <Toaster
         theme="system"
         toastOptions={{
           unstyled: true,
           classNames: {
             toast:
-              "bg-background border border-mid-gray/20 rounded-lg shadow-lg px-4 py-3 flex items-center gap-3 text-sm",
+              "bg-canvas border border-mute/20 rounded-lg shadow-lg px-4 py-3 flex items-center gap-3 text-sm",
             title: "font-medium",
-            description: "text-mid-gray",
+            description: "text-mute",
           },
         }}
       />
