@@ -34,6 +34,7 @@ const MurmurWordmark = ({ width, height, className }: MurmurWordmarkProps) => (
       fontSize={32}
       letterSpacing="-0.5"
       fill="currentColor"
+      style={{ fontFeatureSettings: '"calt", "kern", "liga", "ss03"' }}
     >
       {BRAND_NAME}
     </text>
