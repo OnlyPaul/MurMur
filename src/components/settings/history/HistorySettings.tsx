@@ -25,10 +25,10 @@ const IconButton: React.FC<{
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`p-1.5 rounded-md flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed disabled:text-text/20 ${
+    className={`p-1.5 rounded-md flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed disabled:text-[var(--ash)] ${
       active
-        ? "text-logo-primary hover:text-logo-primary/80"
-        : "text-text/50 hover:text-logo-primary"
+        ? "text-[var(--signal)] hover:text-[var(--signal-pressed)]"
+        : "text-[var(--mute)] hover:text-[var(--signal)]"
     }`}
     title={title}
   >
@@ -238,20 +238,20 @@ export const HistorySettings: React.FC = () => {
 
   if (loading) {
     content = (
-      <div className="px-4 py-3 text-center text-text/60">
+      <div className="px-4 py-3 text-center text-[var(--mute)]">
         {t("settings.history.loading")}
       </div>
     );
   } else if (entries.length === 0) {
     content = (
-      <div className="px-4 py-3 text-center text-text/60">
+      <div className="px-4 py-3 text-center text-[var(--mute)]">
         {t("settings.history.empty")}
       </div>
     );
   } else {
     content = (
       <>
-        <div className="divide-y divide-mid-gray/20">
+        <div className="space-y-2">
           {entries.map((entry) => (
             <HistoryEntryComponent
               key={entry.id}
@@ -275,18 +275,14 @@ export const HistorySettings: React.FC = () => {
       <div className="space-y-2">
         <div className="px-4 flex items-center justify-between">
           <div>
-            <h2 className="text-xs font-medium text-mid-gray uppercase tracking-wide">
-              {t("settings.history.title")}
-            </h2>
+            <h2 className="t-caption-sm">{t("settings.history.title")}</h2>
           </div>
           <OpenRecordingsButton
             onClick={openRecordingsFolder}
             label={t("settings.history.openFolder")}
           />
         </div>
-        <div className="bg-background border border-mid-gray/20 rounded-lg overflow-visible">
-          {content}
-        </div>
+        {content}
       </div>
     </div>
   );
@@ -354,9 +350,9 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
   const formattedDate = formatDateTime(String(entry.timestamp), i18n.language);
 
   return (
-    <div className="px-4 py-2 pb-5 flex flex-col gap-3">
+    <div className="murmur-history-row flex flex-col !items-stretch gap-3">
       <div className="flex justify-between items-center">
-        <p className="text-sm font-medium">{formattedDate}</p>
+        <p className="text-sm font-medium text-[var(--ink)]">{formattedDate}</p>
         <div className="flex items-center">
           <IconButton
             onClick={handleCopyText}
@@ -415,8 +411,8 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
           retrying
             ? ""
             : hasTranscription
-              ? "text-text/90 select-text cursor-text whitespace-pre-wrap break-words"
-              : "text-text/40"
+              ? "text-[var(--body)] select-text cursor-text whitespace-pre-wrap break-words"
+              : "text-[var(--ash)]"
         }`}
         style={
           retrying
@@ -427,8 +423,8 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
         {retrying && (
           <style>{`
             @keyframes transcribe-pulse {
-              0%, 100% { color: color-mix(in srgb, var(--color-text) 40%, transparent); }
-              50% { color: color-mix(in srgb, var(--color-text) 90%, transparent); }
+              0%, 100% { color: color-mix(in srgb, var(--ink) 40%, transparent); }
+              50% { color: color-mix(in srgb, var(--ink) 90%, transparent); }
             }
           `}</style>
         )}

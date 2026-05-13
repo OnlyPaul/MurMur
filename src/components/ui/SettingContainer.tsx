@@ -53,8 +53,8 @@ export const SettingContainer: React.FC<SettingContainerProps> = ({
   };
 
   const baseContainer = grouped
-    ? "px-4 py-3"
-    : "px-4 py-3 rounded-[10px] border border-hairline bg-surface";
+    ? "px-6 py-4"
+    : "px-6 py-4 rounded-[10px] border border-hairline bg-surface";
 
   const infoIcon = (
     <div
@@ -65,7 +65,7 @@ export const SettingContainer: React.FC<SettingContainerProps> = ({
       onClick={toggleTooltip}
     >
       <svg
-        className="w-4 h-4 text-mute cursor-help hover:text-ink transition-colors duration-[120ms] select-none"
+        className="w-4 h-4 text-mute cursor-help hover:text-signal transition-colors duration-[120ms] select-none"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

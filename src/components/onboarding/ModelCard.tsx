@@ -84,7 +84,10 @@ const ModelCard: React.FC<ModelCardProps> = ({
     "murmur-card flex flex-col gap-3 text-left transition-all duration-200";
 
   const getVariantClasses = () => {
-    if (status === "active" || isFeatured) {
+    if (status === "active") {
+      return "bg-[var(--surface-elevated)] border-hairline-strong";
+    }
+    if (isFeatured) {
       return "bg-[var(--surface-elevated)]";
     }
     return "";
@@ -131,7 +134,11 @@ const ModelCard: React.FC<ModelCardProps> = ({
       <div className="flex justify-between items-center w-full">
         <div className="flex flex-col items-start flex-1 min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
-            <h3 className="h-heading-sm">{displayName}</h3>
+            <h3
+              className={`h-heading-sm ${isClickable ? "group-hover:text-[var(--signal)]" : ""} transition-colors`}
+            >
+              {displayName}
+            </h3>
             {showRecommended && model.is_recommended && (
               <Badge variant="primary">{t("onboarding.recommended")}</Badge>
             )}
@@ -160,9 +167,9 @@ const ModelCard: React.FC<ModelCardProps> = ({
                 <p className="text-xs text-[var(--mute)] w-24 text-end">
                   {t("onboarding.modelCard.accuracy")}
                 </p>
-                <div className="w-16 h-[3px] bg-[var(--hairline)] rounded-full overflow-hidden">
+                <div className="w-16 h-1.5 bg-[var(--hairline)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[var(--ink)] rounded-full"
+                    className="h-full bg-[var(--signal)] rounded-full"
                     style={{ width: `${model.accuracy_score * 100}%` }}
                   />
                 </div>
@@ -171,9 +178,9 @@ const ModelCard: React.FC<ModelCardProps> = ({
                 <p className="text-xs text-[var(--mute)] w-24 text-end">
                   {t("onboarding.modelCard.speed")}
                 </p>
-                <div className="w-16 h-[3px] bg-[var(--hairline)] rounded-full overflow-hidden">
+                <div className="w-16 h-1.5 bg-[var(--hairline)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[var(--ink)] rounded-full"
+                    className="h-full bg-[var(--signal)] rounded-full"
                     style={{ width: `${model.speed_score * 100}%` }}
                   />
                 </div>
@@ -276,8 +283,8 @@ const ModelCard: React.FC<ModelCardProps> = ({
       )}
       {status === "verifying" && (
         <div className="w-full mt-3 flex flex-col gap-1">
-          <div className="w-full h-[3px] bg-[var(--hairline)] rounded-full overflow-hidden">
-            <div className="h-full bg-[var(--ink)] rounded-full animate-pulse w-full" />
+          <div className="w-full h-1.5 bg-[var(--hairline)] rounded-full overflow-hidden">
+            <div className="h-full bg-[var(--signal)] rounded-full animate-pulse w-full" />
           </div>
           <p className="text-xs text-[var(--mute)]">
             {t("modelSelector.verifyingGeneric")}
@@ -286,8 +293,8 @@ const ModelCard: React.FC<ModelCardProps> = ({
       )}
       {status === "extracting" && (
         <div className="w-full mt-3 flex flex-col gap-1">
-          <div className="w-full h-[3px] bg-[var(--hairline)] rounded-full overflow-hidden">
-            <div className="h-full bg-[var(--ink)] rounded-full animate-pulse w-full" />
+          <div className="w-full h-1.5 bg-[var(--hairline)] rounded-full overflow-hidden">
+            <div className="h-full bg-[var(--signal)] rounded-full animate-pulse w-full" />
           </div>
           <p className="text-xs text-[var(--mute)]">
             {t("modelSelector.extractingGeneric")}
