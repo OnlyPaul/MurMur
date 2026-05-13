@@ -1,0 +1,209 @@
+/* Murmur — tokens.css
+ * Tokens + semantic element styles.
+ * Synced from design/design-system/colors_and_type.css.
+ * The only divergence: the Google Fonts @import is replaced by local
+ * @font-face declarations that point at the bundled .woff2 files.
+ */
+
+/* -------- Fonts ---------------------------------------------------------- */
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/InterVariable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("./fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("./fonts/JetBrainsMono-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* -------- Tokens --------------------------------------------------------- */
+:root {
+  /* Surface ladder (dark only) */
+  --canvas:            #08090b;
+  --surface:           #0e0f12;
+  --surface-elevated:  #14161a;
+  --surface-card:      #181a1f;
+
+  /* Hairlines (no shadows in this system) */
+  --hairline:          #23262c;
+  --hairline-strong:   rgba(255, 255, 255, 0.14);
+  --hairline-soft:     rgba(255, 255, 255, 0.07);
+
+  /* Text */
+  --ink:               #f4f4f6;
+  --body:              #cdcdd2;
+  --charcoal:          #d6d6db;
+  --mute:              #9b9da2;
+  --ash:               #6a6c72;
+  --stone:             #43454a;
+  --on-dark:           #ffffff;
+  --on-dark-mute:      rgba(255, 255, 255, 0.72);
+
+  /* CTA — pure white pill, as in the reference */
+  --primary:           #ffffff;
+  --primary-pressed:   #e8e8e8;
+  --on-primary:        #000000;
+
+  /* Signal — Murmur's one saturated color. mic-active + hero glow. */
+  --signal:            #f0b878;
+  --signal-pressed:    #d8a262;
+  --signal-soft:       rgba(240, 184, 120, 0.16);
+  --signal-strong:     rgba(240, 184, 120, 0.55);
+
+  /* Semantic */
+  --ok:                #6fcf9c;
+  --ok-soft:           rgba(111, 207, 156, 0.16);
+  --err:               #ff7a7a;
+  --err-soft:          rgba(255, 122, 122, 0.16);
+  --info:              #7ec0ff;
+  --info-soft:         rgba(126, 192, 255, 0.16);
+
+  /* Type */
+  --font-sans: "Inter", "Inter Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --feat: "calt", "kern", "liga", "ss03";
+
+  /* Spacing scale */
+  --sp-xxs: 2px;
+  --sp-xs:  4px;
+  --sp-sm:  8px;
+  --sp-md:  12px;
+  --sp-lg:  16px;
+  --sp-xl:  24px;
+  --sp-2xl: 32px;
+  --sp-section: 96px;
+
+  /* Radii */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 10px;
+  --r-xl: 16px;
+  --r-full: 9999px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --d-fast: 120ms;
+  --d-med:  220ms;
+  --d-slow: 600ms;
+}
+
+/* -------- Base ----------------------------------------------------------- */
+html, body {
+  background: var(--canvas);
+  color: var(--body);
+  font-family: var(--font-sans);
+  font-feature-settings: var(--feat);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  margin: 0;
+}
+
+/* -------- Semantic typography ------------------------------------------- */
+.h-display-xl {
+  font: 600 56px/1.08 var(--font-sans);
+  letter-spacing: -0.4px;
+  color: var(--ink);
+}
+.h-display-lg {
+  font: 500 44px/1.12 var(--font-sans);
+  letter-spacing: -0.2px;
+  color: var(--ink);
+}
+.h-display-md {
+  font: 500 32px/1.18 var(--font-sans);
+  letter-spacing: -0.1px;
+  color: var(--ink);
+}
+.h-heading-xl { font: 500 24px/1.35 var(--font-sans); letter-spacing: 0.1px; color: var(--ink); }
+.h-heading-lg { font: 500 20px/1.4  var(--font-sans); letter-spacing: 0.1px; color: var(--ink); }
+.h-heading-md { font: 500 18px/1.4  var(--font-sans); letter-spacing: 0.1px; color: var(--ink); }
+.h-heading-sm { font: 500 15px/1.4  var(--font-sans); letter-spacing: 0.2px; color: var(--ink); }
+
+.t-body-lg     { font: 400 18px/1.6  var(--font-sans); color: var(--body); }
+.t-body        { font: 400 16px/1.6  var(--font-sans); color: var(--body); }
+.t-body-strong { font: 500 16px/1.5  var(--font-sans); color: var(--ink);  letter-spacing: 0.1px; }
+.t-body-sm     { font: 400 14px/1.55 var(--font-sans); color: var(--body); }
+.t-caption     { font: 400 13px/1.4  var(--font-sans); color: var(--mute); letter-spacing: 0.1px; }
+.t-caption-sm  { font: 500 12px/1.4  var(--font-sans); color: var(--mute); letter-spacing: 0.4px; text-transform: uppercase; }
+.t-button      { font: 500 14px/1    var(--font-sans); letter-spacing: 0.2px; }
+
+.t-mono        { font: 400 13px/1.5  var(--font-mono); color: var(--body); }
+
+/* Element defaults — so plain <h1>/<p>/<code> inherit the system */
+h1 { font: 600 56px/1.08 var(--font-sans); letter-spacing: -0.4px; color: var(--ink); margin: 0 0 var(--sp-lg); }
+h2 { font: 500 32px/1.18 var(--font-sans); letter-spacing: -0.1px; color: var(--ink); margin: 0 0 var(--sp-md); }
+h3 { font: 500 20px/1.4  var(--font-sans); letter-spacing: 0.1px;  color: var(--ink); margin: 0 0 var(--sp-sm); }
+h4 { font: 500 15px/1.4  var(--font-sans); letter-spacing: 0.2px;  color: var(--ink); margin: 0 0 var(--sp-xs); }
+p  { font: 400 16px/1.6  var(--font-sans); color: var(--body); margin: 0 0 var(--sp-md); }
+a  { color: var(--on-dark); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+code, kbd, samp {
+  font: 400 0.9em/1.5 var(--font-mono);
+  background: var(--surface-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-xs);
+  padding: 1px 6px;
+  color: var(--ink);
+}
+
+::selection { background: var(--signal-soft); color: var(--ink); }
+
+/* -------- Common atoms (used by previews & UI kits) --------------------- */
+.murmur-btn {
+  display: inline-flex; align-items: center; gap: var(--sp-sm);
+  height: 36px; padding: 0 var(--sp-lg);
+  border-radius: var(--r-md);
+  font: 500 14px/1 var(--font-sans); letter-spacing: 0.2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background var(--d-fast) var(--ease), transform var(--d-fast) var(--ease), border-color var(--d-fast) var(--ease);
+}
+.murmur-btn:active { transform: scale(0.98); }
+
+.murmur-btn--primary   { background: var(--primary); color: var(--on-primary); }
+.murmur-btn--primary:hover { background: #f7f7f7; }
+
+.murmur-btn--tertiary  { background: var(--surface-elevated); color: var(--on-dark); border-color: var(--hairline); }
+.murmur-btn--tertiary:hover { background: var(--surface-card); }
+
+.murmur-btn--ghost     { background: transparent; color: var(--on-dark); }
+.murmur-btn--ghost:hover { background: var(--surface-elevated); }
+
+.murmur-card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: var(--sp-xl);
+}
+
+.keycap {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 20px; height: 20px; padding: 0 6px;
+  font: 500 12px/1 var(--font-sans);
+  color: var(--body);
+  background: linear-gradient(180deg, var(--surface-card), var(--surface));
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-xs);
+}
+
+.dot-signal {
+  width: 8px; height: 8px; border-radius: var(--r-full);
+  background: var(--signal);
+  box-shadow: 0 0 0 4px var(--signal-soft);
+}
