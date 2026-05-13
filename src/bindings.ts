@@ -835,6 +835,13 @@ export type ImplementationChangeResult = { success: boolean;
  * List of binding IDs that were reset to defaults due to incompatibility
  */
 reset_bindings: string[] }
+/**
+ * Which keyboard shortcut backend Murmur uses.
+ * 
+ * The `HandyKeys` variant identifies the upstream `handy-keys` crate
+ * (https://crates.io/crates/handy-keys) that Murmur wraps; the variant name
+ * reflects that third-party crate's identity rather than Murmur branding.
+ */
 export type KeyboardImplementation = "tauri" | "handy_keys"
 export type LLMPrompt = { id: string; name: string; prompt: string }
 export type LogLevel = "trace" | "debug" | "info" | "warn" | "error"

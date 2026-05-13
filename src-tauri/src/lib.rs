@@ -503,6 +503,19 @@ pub fn run(cli_args: CliArgs) {
 
             win_builder.build()?;
 
+            match portable::migrate_legacy_app_data(&app.handle()) {
+                Ok(Some(from)) => {
+                    log::info!(
+                        "Migrated legacy Handy app data into Murmur data dir from {}",
+                        from.display()
+                    );
+                }
+                Ok(None) => {}
+                Err(err) => {
+                    log::warn!("Failed to migrate legacy Handy app data: {}", err);
+                }
+            }
+
             let mut settings = get_settings(&app.handle());
 
             // CLI --debug flag overrides debug_mode and log level (runtime-only, not persisted)
