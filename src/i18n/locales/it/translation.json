@@ -605,7 +605,6 @@
     "description": "Cambia la lingua dell'interfaccia di Murmur"
   },
   "overlay": {
-    "transcribing": "Trascrizione...",
-    "processing": "Elaborazione..."
+    "cancel": "Annulla registrazione"
   }
 }

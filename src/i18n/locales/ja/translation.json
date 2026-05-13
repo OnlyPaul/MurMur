@@ -605,7 +605,6 @@
     "description": "Murmurインターフェースの言語を変更"
   },
   "overlay": {
-    "transcribing": "文字起こし中...",
-    "processing": "処理中..."
+    "cancel": "録音をキャンセル"
   }
 }
