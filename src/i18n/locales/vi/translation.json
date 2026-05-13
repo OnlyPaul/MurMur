@@ -605,7 +605,6 @@
     "description": "Thay đổi ngôn ngữ giao diện của Murmur"
   },
   "overlay": {
-    "transcribing": "Đang chuyển đổi...",
-    "processing": "Đang xử lý..."
+    "cancel": "Hủy ghi âm"
   }
 }

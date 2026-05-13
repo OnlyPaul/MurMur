@@ -605,7 +605,6 @@
     "description": "變更 Murmur 介面的語言"
   },
   "overlay": {
-    "transcribing": "正在轉錄...",
-    "processing": "處理中..."
+    "cancel": "取消錄音"
   }
 }

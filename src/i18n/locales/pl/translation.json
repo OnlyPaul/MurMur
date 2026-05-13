@@ -605,7 +605,6 @@
     "description": "Zmień język interfejsu Murmur"
   },
   "overlay": {
-    "transcribing": "Transkrypcja...",
-    "processing": "Przetwarzanie..."
+    "cancel": "Anuluj nagrywanie"
   }
 }

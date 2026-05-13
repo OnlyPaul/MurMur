@@ -605,7 +605,6 @@
     "description": "Змінити мову інтерфейсу Murmur"
   },
   "overlay": {
-    "transcribing": "Обробка...",
-    "processing": "Постобробка..."
+    "cancel": "Скасувати запис"
   }
 }

@@ -605,7 +605,6 @@
     "description": "Murmur arayüzünün dilini değiştirin"
   },
   "overlay": {
-    "transcribing": "Transkribe ediliyor...",
-    "processing": "İşleniyor..."
+    "cancel": "Kaydı iptal et"
   }
 }
