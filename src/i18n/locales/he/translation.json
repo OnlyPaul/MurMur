@@ -605,7 +605,6 @@
     "description": "שנה את שפת הממשק של Murmur"
   },
   "overlay": {
-    "transcribing": "מתמלל...",
-    "processing": "מעבד..."
+    "cancel": "ביטול הקלטה"
   }
 }

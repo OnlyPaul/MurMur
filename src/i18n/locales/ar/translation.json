@@ -605,7 +605,6 @@
     "description": "تغيير لغة واجهة Murmur"
   },
   "overlay": {
-    "transcribing": "...جاري التفريغ",
-    "processing": "...جاري المعالجة"
+    "cancel": "إلغاء التسجيل"
   }
 }

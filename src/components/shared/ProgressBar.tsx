@@ -16,13 +16,13 @@ interface ProgressBarProps {
 }
 
 const sizeClasses = {
-  small: "w-16",
-  medium: "w-20",
-  large: "w-24",
+  small: "w-16 h-[3px]",
+  medium: "w-full h-[3px]",
+  large: "w-full h-1",
 } as const;
 
 const trackClasses =
-  "[&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-bar]:bg-surface-elevated [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-ink [&::-moz-progress-bar]:bg-ink h-[3px]";
+  "[&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-bar]:bg-[var(--hairline)] [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-[var(--ink)] [&::-webkit-progress-value]:transition-all [&::-moz-progress-bar]:bg-[var(--ink)]";
 
 const ProgressBar: React.FC<ProgressBarProps> = ({
   progress,

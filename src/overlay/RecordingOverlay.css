@@ -1,95 +1,131 @@
 .recording-overlay {
-  height: 36px;
-  width: 172px;
+  width: 280px;
+  height: 44px;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  padding: 6px;
-  background: #000000cc;
-  border-radius: 18px;
-  opacity: 0;
-  transition: opacity 300ms ease-out;
+  gap: 12px;
+  padding: 0 12px;
   box-sizing: border-box;
-}
-
-.overlay-left {
-  display: flex;
-  align-items: center;
-}
-
-.overlay-middle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.overlay-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.bars-container {
-  display: flex;
-  align-items: end;
-  justify-content: center;
-  gap: 3px;
-  padding-bottom: 0px;
-  height: 24px;
-  overflow: hidden;
-}
-
-.bar {
-  width: 6px;
-  background: #ffe5ee;
-  max-height: 20px;
-  border-radius: 2px;
-  transition: height 80ms linear;
-  min-height: 4px;
+  background: rgba(20, 22, 26, 0.78);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-xl);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  opacity: 0;
+  transition: opacity var(--d-fast) var(--ease);
+  font-family: var(--font-sans);
 }
 
 .recording-overlay.fade-in {
   opacity: 1;
 }
 
-.transcribing-text {
-  color: white;
-  font-size: 12px;
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  animation: transcribing-pulse 1.5s infinite ease-in-out;
-}
-
-@keyframes transcribing-pulse {
-  0%,
-  100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.cancel-button {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition:
-    background-color 150ms ease-out,
-    transform 100ms ease-out;
+.overlay-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-full);
+  background: var(--ash);
+  transition: background-color var(--d-fast) var(--ease);
   flex-shrink: 0;
 }
 
-.cancel-button:hover {
-  background: #faa2ca33;
-  transform: scale(1.05);
+.overlay-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-full);
+  box-shadow: 0 0 0 0 var(--signal-strong);
+  opacity: 0;
+  pointer-events: none;
 }
 
-.cancel-button:active {
-  transform: scale(0.95);
+.state-recording .overlay-dot {
+  background: var(--signal);
+}
+
+.state-recording .overlay-dot::after {
+  animation: overlay-dot-pulse 1600ms var(--ease) infinite;
+}
+
+@keyframes overlay-dot-pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--signal-strong);
+    opacity: 0.9;
+  }
+  60% {
+    box-shadow: 0 0 0 4px rgba(240, 184, 120, 0);
+    opacity: 0;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(240, 184, 120, 0);
+    opacity: 0;
+  }
+}
+
+.overlay-bars {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+}
+
+.overlay-bar {
+  --lvl: 0;
+  display: block;
+  width: 100%;
+  min-height: 2px;
+  height: calc(2px + clamp(0, var(--lvl), 1) * 22px);
+  background: var(--signal);
+  border-radius: 1px;
+  opacity: 1;
+  transition:
+    height 60ms linear,
+    opacity var(--d-fast) var(--ease),
+    background-color var(--d-fast) var(--ease);
+}
+
+.state-transcribing .overlay-bar,
+.state-processing .overlay-bar {
+  opacity: 0.35;
+}
+
+.state-transcribing .overlay-dot,
+.state-processing .overlay-dot {
+  background: var(--ash);
+}
+
+.state-transcribing .overlay-dot::after,
+.state-processing .overlay-dot::after {
+  animation: none;
+}
+
+.overlay-cancel {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--mute);
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition:
+    background-color var(--d-fast) var(--ease),
+    color var(--d-fast) var(--ease);
+}
+
+.overlay-cancel:hover {
+  background: var(--surface-elevated);
+  color: var(--ink);
+}
+
+.overlay-cancel:active {
+  background: var(--surface-card);
 }

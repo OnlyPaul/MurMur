@@ -608,7 +608,6 @@
     "description": "Change the language of the Murmur interface"
   },
   "overlay": {
-    "transcribing": "Transcribing...",
-    "processing": "Processing..."
+    "cancel": "Cancel recording"
   }
 }
