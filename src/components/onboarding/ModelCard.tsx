@@ -17,6 +17,7 @@ import {
 import { LANGUAGES } from "../../lib/constants/languages";
 import Badge from "../ui/Badge";
 import { Button } from "../ui/Button";
+import ProgressBar from "../shared/ProgressBar";
 
 // Get display text for model's language support
 const getLanguageDisplayText = (
@@ -80,22 +81,19 @@ const ModelCard: React.FC<ModelCardProps> = ({
   const displayDescription = getTranslatedModelDescription(model, t);
 
   const baseClasses =
-    "flex flex-col rounded-xl px-4 py-3 gap-2 text-left transition-all duration-200";
+    "murmur-card flex flex-col gap-3 text-left transition-all duration-200";
 
   const getVariantClasses = () => {
-    if (status === "active") {
-      return "border-2 border-logo-primary/50 bg-logo-primary/10";
+    if (status === "active" || isFeatured) {
+      return "bg-[var(--surface-elevated)]";
     }
-    if (isFeatured) {
-      return "border-2 border-logo-primary/25 bg-logo-primary/5";
-    }
-    return "border-2 border-mid-gray/20";
+    return "";
   };
 
   const getInteractiveClasses = () => {
     if (!isClickable) return "";
     if (disabled) return "opacity-50 cursor-not-allowed";
-    return "cursor-pointer hover:border-logo-primary/50 hover:bg-logo-primary/5 hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] group";
+    return "cursor-pointer hover:bg-[var(--surface-elevated)] active:scale-[0.99] group";
   };
 
   const handleClick = () => {
@@ -133,11 +131,7 @@ const ModelCard: React.FC<ModelCardProps> = ({
       <div className="flex justify-between items-center w-full">
         <div className="flex flex-col items-start flex-1 min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
-            <h3
-              className={`text-base font-semibold text-text ${isClickable ? "group-hover:text-logo-primary" : ""} transition-colors`}
-            >
-              {displayName}
-            </h3>
+            <h3 className="h-heading-sm">{displayName}</h3>
             {showRecommended && model.is_recommended && (
               <Badge variant="primary">{t("onboarding.recommended")}</Badge>
             )}
@@ -157,31 +151,29 @@ const ModelCard: React.FC<ModelCardProps> = ({
               </Badge>
             )}
           </div>
-          <p className="text-text/60 text-sm leading-relaxed">
-            {displayDescription}
-          </p>
+          <p className="t-body-sm text-[var(--body)]">{displayDescription}</p>
         </div>
         {(model.accuracy_score > 0 || model.speed_score > 0) && (
           <div className="hidden sm:flex items-center ms-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <p className="text-xs text-text/60 w-24 text-end">
+                <p className="text-xs text-[var(--mute)] w-24 text-end">
                   {t("onboarding.modelCard.accuracy")}
                 </p>
-                <div className="w-16 h-1.5 bg-mid-gray/20 rounded-full overflow-hidden">
+                <div className="w-16 h-[3px] bg-[var(--hairline)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-logo-primary rounded-full"
+                    className="h-full bg-[var(--ink)] rounded-full"
                     style={{ width: `${model.accuracy_score * 100}%` }}
                   />
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <p className="text-xs text-text/60 w-24 text-end">
+                <p className="text-xs text-[var(--mute)] w-24 text-end">
                   {t("onboarding.modelCard.speed")}
                 </p>
-                <div className="w-16 h-1.5 bg-mid-gray/20 rounded-full overflow-hidden">
+                <div className="w-16 h-[3px] bg-[var(--hairline)] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-logo-primary rounded-full"
+                    className="h-full bg-[var(--ink)] rounded-full"
                     style={{ width: `${model.speed_score * 100}%` }}
                   />
                 </div>
@@ -191,13 +183,13 @@ const ModelCard: React.FC<ModelCardProps> = ({
         )}
       </div>
 
-      <hr className="w-full border-mid-gray/20" />
+      <hr className="w-full border-[var(--hairline)]" />
 
       {/* Bottom row: tags + action buttons (full width) */}
       <div className="flex items-center gap-3 w-full -mb-0.5 mt-0.5 h-5">
         {model.supported_languages.length > 0 && (
           <div
-            className="flex items-center gap-1 text-xs text-text/50"
+            className="flex items-center gap-1 text-xs text-[var(--mute)]"
             title={
               model.supported_languages.length === 1
                 ? t("modelSelector.capabilities.singleLanguage")
@@ -210,7 +202,7 @@ const ModelCard: React.FC<ModelCardProps> = ({
         )}
         {model.supports_translation && (
           <div
-            className="flex items-center gap-1 text-xs text-text/50"
+            className="flex items-center gap-1 text-xs text-[var(--mute)]"
             title={t("modelSelector.capabilities.translation")}
           >
             <Languages className="w-3.5 h-3.5" />
@@ -218,7 +210,7 @@ const ModelCard: React.FC<ModelCardProps> = ({
           </div>
         )}
         {status === "downloadable" && (
-          <span className="flex items-center gap-1.5 ms-auto text-xs text-text/50">
+          <span className="flex items-center gap-1.5 ms-auto text-xs text-[var(--mute)]">
             <Download className="w-3.5 h-3.5" />
             <span>{formatModelSize(Number(model.size_mb))}</span>
           </span>
@@ -229,7 +221,7 @@ const ModelCard: React.FC<ModelCardProps> = ({
             size="sm"
             onClick={handleDelete}
             title={t("modelSelector.deleteModel", { modelName: displayName })}
-            className="flex items-center gap-1.5 ms-auto text-logo-primary/85 hover:text-logo-primary hover:bg-logo-primary/10"
+            className="flex items-center gap-1.5 ms-auto text-[var(--mute)] hover:text-[var(--ink)]"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>{t("common.delete")}</span>
@@ -239,22 +231,26 @@ const ModelCard: React.FC<ModelCardProps> = ({
 
       {/* Download/extract progress */}
       {status === "downloading" && downloadProgress !== undefined && (
-        <div className="w-full mt-3">
-          <div className="w-full h-1.5 bg-mid-gray/20 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-logo-primary rounded-full transition-all duration-300"
-              style={{ width: `${downloadProgress}%` }}
-            />
-          </div>
-          <div className="flex items-center justify-between text-xs mt-1">
-            <span className="text-text/50">
+        <div className="w-full mt-3 flex flex-col gap-1">
+          <ProgressBar
+            progress={[
+              {
+                id: model.id,
+                percentage: downloadProgress,
+                speed: downloadSpeed,
+              },
+            ]}
+            size="medium"
+          />
+          <div className="flex items-center justify-between text-xs text-[var(--mute)]">
+            <span>
               {t("modelSelector.downloading", {
                 percentage: Math.round(downloadProgress),
               })}
             </span>
             <div className="flex items-center gap-2">
               {downloadSpeed !== undefined && downloadSpeed > 0 && (
-                <span className="tabular-nums text-text/50">
+                <span className="tabular-nums">
                   {t("modelSelector.downloadSpeed", {
                     speed: downloadSpeed.toFixed(1),
                   })}
@@ -279,21 +275,21 @@ const ModelCard: React.FC<ModelCardProps> = ({
         </div>
       )}
       {status === "verifying" && (
-        <div className="w-full mt-3">
-          <div className="w-full h-1.5 bg-mid-gray/20 rounded-full overflow-hidden">
-            <div className="h-full bg-logo-primary rounded-full animate-pulse w-full" />
+        <div className="w-full mt-3 flex flex-col gap-1">
+          <div className="w-full h-[3px] bg-[var(--hairline)] rounded-full overflow-hidden">
+            <div className="h-full bg-[var(--ink)] rounded-full animate-pulse w-full" />
           </div>
-          <p className="text-xs text-text/50 mt-1">
+          <p className="text-xs text-[var(--mute)]">
             {t("modelSelector.verifyingGeneric")}
           </p>
         </div>
       )}
       {status === "extracting" && (
-        <div className="w-full mt-3">
-          <div className="w-full h-1.5 bg-mid-gray/20 rounded-full overflow-hidden">
-            <div className="h-full bg-logo-primary rounded-full animate-pulse w-full" />
+        <div className="w-full mt-3 flex flex-col gap-1">
+          <div className="w-full h-[3px] bg-[var(--hairline)] rounded-full overflow-hidden">
+            <div className="h-full bg-[var(--ink)] rounded-full animate-pulse w-full" />
           </div>
-          <p className="text-xs text-text/50 mt-1">
+          <p className="text-xs text-[var(--mute)]">
             {t("modelSelector.extractingGeneric")}
           </p>
         </div>

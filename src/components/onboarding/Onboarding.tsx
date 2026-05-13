@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import type { ModelInfo } from "@/bindings";
 import type { ModelCardStatus } from "./ModelCard";
 import ModelCard from "./ModelCard";
+import MurmurMark from "../icons/MurmurMark";
 import MurmurWordmark from "../icons/MurmurWordmark";
 import { useModelStore } from "../../stores/modelStore";
 
@@ -89,15 +90,16 @@ const Onboarding: React.FC<OnboardingProps> = ({ onModelSelected }) => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col p-6 gap-4 inset-0">
-      <div className="flex flex-col items-center gap-2 shrink-0">
-        <MurmurWordmark width={200} className="text-text" />
-        <p className="text-text/70 max-w-md font-medium mx-auto">
+    <div className="min-h-screen w-screen flex flex-col items-center p-6 gap-6 bg-[var(--canvas)] inset-0">
+      <div className="flex flex-col items-center gap-3 shrink-0 text-[var(--ink)]">
+        <MurmurMark width={48} height={48} />
+        <MurmurWordmark width={200} />
+        <p className="t-body text-[var(--body)] max-w-md text-center">
           {t("onboarding.subtitle")}
         </p>
       </div>
 
-      <div className="max-w-[600px] w-full mx-auto text-center flex-1 flex flex-col min-h-0">
+      <div className="max-w-[600px] w-full mx-auto flex-1 flex flex-col min-h-0">
         <div className="flex flex-col gap-4 pb-6">
           {models
             .filter((m: ModelInfo) => !m.is_downloaded)
