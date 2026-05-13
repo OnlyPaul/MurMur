@@ -314,7 +314,7 @@ const PostProcessingSettingsPromptsComponent: React.FC = () => {
                   "settings.postProcessing.prompts.promptInstructionsPlaceholder",
                 )}
               />
-              <p className="text-xs text-mid-gray/70">
+              <p className="text-xs text-mute/70">
                 <Trans
                   i18nKey="settings.postProcessing.prompts.promptTip"
                   components={{ code: <code /> }}
@@ -344,8 +344,8 @@ const PostProcessingSettingsPromptsComponent: React.FC = () => {
         )}
 
         {!isCreating && !selectedPrompt && (
-          <div className="p-3 bg-mid-gray/5 rounded-md border border-mid-gray/20">
-            <p className="text-sm text-mid-gray">
+          <div className="p-3 bg-mute/5 rounded-md border border-mute/20">
+            <p className="text-sm text-mute">
               {hasPrompts
                 ? t("settings.postProcessing.prompts.selectToEdit")
                 : t("settings.postProcessing.prompts.createFirst")}
@@ -356,7 +356,7 @@ const PostProcessingSettingsPromptsComponent: React.FC = () => {
         {isCreating && (
           <div className="space-y-3">
             <div className="space-y-2 block flex flex-col">
-              <label className="text-sm font-semibold text-text">
+              <label className="text-sm font-semibold text-ink">
                 {t("settings.postProcessing.prompts.promptLabel")}
               </label>
               <Input
@@ -381,7 +381,7 @@ const PostProcessingSettingsPromptsComponent: React.FC = () => {
                   "settings.postProcessing.prompts.promptInstructionsPlaceholder",
                 )}
               />
-              <p className="text-xs text-mid-gray/70">
+              <p className="text-xs text-mute/70">
                 <Trans
                   i18nKey="settings.postProcessing.prompts.promptTip"
                   components={{ code: <code /> }}

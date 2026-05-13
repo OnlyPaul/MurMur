@@ -199,7 +199,7 @@ export const ModelsSettings: React.FC = () => {
     return (
       <div className="max-w-3xl w-full mx-auto">
         <div className="flex items-center justify-center py-16">
-          <div className="w-8 h-8 border-2 border-logo-primary border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-signal border-t-transparent rounded-full animate-spin" />
         </div>
       </div>
     );
@@ -211,7 +211,7 @@ export const ModelsSettings: React.FC = () => {
         <h1 className="text-xl font-semibold mb-2">
           {t("settings.models.title")}
         </h1>
-        <p className="text-sm text-text/60">
+        <p className="text-sm text-ink/60">
           {t("settings.models.description")}
         </p>
       </div>
@@ -220,7 +220,7 @@ export const ModelsSettings: React.FC = () => {
           {/* Downloaded Models Section — header always visible so filter stays accessible */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-medium text-text/60">
+              <h2 className="text-sm font-medium text-ink/60">
                 {t("settings.models.yourModels")}
               </h2>
               {/* Language filter dropdown */}
@@ -230,8 +230,8 @@ export const ModelsSettings: React.FC = () => {
                   onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
                     languageFilter !== "all"
-                      ? "bg-logo-primary/20 text-logo-primary"
-                      : "bg-mid-gray/10 text-text/60 hover:bg-mid-gray/20"
+                      ? "bg-signal/20 text-signal"
+                      : "bg-mute/10 text-ink/60 hover:bg-mute/20"
                   }`}
                 >
                   <Globe className="w-3.5 h-3.5" />
@@ -246,8 +246,8 @@ export const ModelsSettings: React.FC = () => {
                 </button>
 
                 {languageDropdownOpen && (
-                  <div className="absolute top-full right-0 mt-1 w-56 bg-background border border-mid-gray/80 rounded-lg shadow-lg z-50 overflow-hidden">
-                    <div className="p-2 border-b border-mid-gray/40">
+                  <div className="absolute top-full right-0 mt-1 w-56 bg-canvas border border-mute/80 rounded-lg shadow-lg z-50 overflow-hidden">
+                    <div className="p-2 border-b border-mute/40">
                       <input
                         ref={languageSearchInputRef}
                         type="text"
@@ -269,7 +269,7 @@ export const ModelsSettings: React.FC = () => {
                         placeholder={t(
                           "settings.general.language.searchPlaceholder",
                         )}
-                        className="w-full px-2 py-1 text-sm bg-mid-gray/10 border border-mid-gray/40 rounded-md focus:outline-none focus:ring-1 focus:ring-logo-primary"
+                        className="w-full px-2 py-1 text-sm bg-mute/10 border border-mute/40 rounded-md focus:outline-none focus:ring-1 focus:ring-signal"
                       />
                     </div>
                     <div className="max-h-48 overflow-y-auto">
@@ -282,8 +282,8 @@ export const ModelsSettings: React.FC = () => {
                         }}
                         className={`w-full px-3 py-1.5 text-sm text-left transition-colors ${
                           languageFilter === "all"
-                            ? "bg-logo-primary/20 text-logo-primary font-semibold"
-                            : "hover:bg-mid-gray/10"
+                            ? "bg-signal/20 text-signal font-semibold"
+                            : "hover:bg-mute/10"
                         }`}
                       >
                         {t("settings.models.filters.allLanguages")}
@@ -299,15 +299,15 @@ export const ModelsSettings: React.FC = () => {
                           }}
                           className={`w-full px-3 py-1.5 text-sm text-left transition-colors ${
                             languageFilter === lang.value
-                              ? "bg-logo-primary/20 text-logo-primary font-semibold"
-                              : "hover:bg-mid-gray/10"
+                              ? "bg-signal/20 text-signal font-semibold"
+                              : "hover:bg-mute/10"
                           }`}
                         >
                           {lang.label}
                         </button>
                       ))}
                       {filteredLanguages.length === 0 && (
-                        <div className="px-3 py-2 text-sm text-text/50 text-center">
+                        <div className="px-3 py-2 text-sm text-ink/50 text-center">
                           {t("settings.general.language.noResults")}
                         </div>
                       )}
@@ -335,7 +335,7 @@ export const ModelsSettings: React.FC = () => {
           {/* Available Models Section */}
           {availableModels.length > 0 && (
             <div className="space-y-3">
-              <h2 className="text-sm font-medium text-text/60">
+              <h2 className="text-sm font-medium text-ink/60">
                 {t("settings.models.availableModels")}
               </h2>
               {availableModels.map((model: ModelInfo) => (
@@ -356,7 +356,7 @@ export const ModelsSettings: React.FC = () => {
           )}
         </div>
       ) : (
-        <div className="text-center py-8 text-text/50">
+        <div className="text-center py-8 text-ink/50">
           {t("settings.models.noModelsMatch")}
         </div>
       )}

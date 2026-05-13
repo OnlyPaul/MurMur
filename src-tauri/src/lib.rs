@@ -497,6 +497,15 @@ pub fn run(cli_args: CliArgs) {
                     .maximizable(false)
                     .visible(false);
 
+            // macOS: extend the dark canvas under inset traffic lights.
+            // Windows/Linux keep their native chrome.
+            #[cfg(target_os = "macos")]
+            {
+                win_builder = win_builder
+                    .title_bar_style(tauri::TitleBarStyle::Overlay)
+                    .hidden_title(true);
+            }
+
             if let Some(data_dir) = portable::data_dir() {
                 win_builder = win_builder.data_directory(data_dir.join("webview"));
             }

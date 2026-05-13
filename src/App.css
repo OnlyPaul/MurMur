@@ -24,15 +24,6 @@
   --color-info: #7ec0ff;
   --color-primary: #ffffff;
   --color-on-primary: #000000;
-
-  /* Transitional Handy → Murmur aliases. Removed in #17. */
-  --color-text: var(--color-ink);
-  --color-background: var(--color-canvas);
-  --color-background-ui: var(--color-signal);
-  --color-logo-primary: var(--color-signal);
-  --color-logo-stroke: var(--color-ink);
-  --color-text-stroke: var(--color-canvas);
-  --color-mid-gray: var(--color-mute);
 }
 
 :root {
@@ -46,15 +37,33 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  --scrollbar-thumb: color-mix(in srgb, var(--color-text), transparent 85%);
+  /* Reserves vertical space for the macOS traffic lights when the
+     main window uses TitleBarStyle::Overlay. 0 on Win/Linux. */
+  --titlebar-inset: 0px;
+
+  --scrollbar-thumb: color-mix(in srgb, var(--color-ink), transparent 85%);
   --scrollbar-thumb-hover: color-mix(
     in srgb,
-    var(--color-text),
+    var(--color-ink),
     transparent 70%
   );
 
-  color: var(--color-text);
-  background-color: var(--color-background);
+  color: var(--color-ink);
+  background-color: var(--color-canvas);
+}
+
+body {
+  background-color: var(--color-canvas);
+}
+
+:root[data-platform="macos"] {
+  --titlebar-inset: 28px;
+}
+
+.titlebar-spacer {
+  flex-shrink: 0;
+  width: 100%;
+  height: var(--titlebar-inset);
 }
 
 .container {
@@ -97,16 +106,6 @@
 
 @layer utilities {
   .text-stroke {
-    -webkit-text-stroke: 2px var(--color-text-stroke);
+    -webkit-text-stroke: 2px var(--color-canvas);
   }
-}
-
-.logo-primary {
-  fill: var(--color-logo-primary);
-}
-
-.logo-stroke {
-  fill: var(--color-logo-stroke);
-  stroke: var(--color-logo-stroke);
-  stroke-width: 1;
 }

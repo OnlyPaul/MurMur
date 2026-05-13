@@ -91,8 +91,8 @@ const Onboarding: React.FC<OnboardingProps> = ({ onModelSelected }) => {
   return (
     <div className="h-screen w-screen flex flex-col p-6 gap-4 inset-0">
       <div className="flex flex-col items-center gap-2 shrink-0">
-        <MurmurWordmark width={200} className="text-text" />
-        <p className="text-text/70 max-w-md font-medium mx-auto">
+        <MurmurWordmark width={200} className="text-ink" />
+        <p className="text-ink/70 max-w-md font-medium mx-auto">
           {t("onboarding.subtitle")}
         </p>
       </div>
