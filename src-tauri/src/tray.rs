@@ -94,9 +94,9 @@ pub fn tray_tooltip() -> String {
 
 fn version_label() -> String {
     if cfg!(debug_assertions) {
-        format!("Handy v{} (Dev)", env!("CARGO_PKG_VERSION"))
+        format!("Murmur v{} (Dev)", env!("CARGO_PKG_VERSION"))
     } else {
-        format!("Handy v{}", env!("CARGO_PKG_VERSION"))
+        format!("Murmur v{}", env!("CARGO_PKG_VERSION"))
     }
 }
 
@@ -269,8 +269,18 @@ pub fn copy_last_transcript(app: &AppHandle) {
 
 #[cfg(test)]
 mod tests {
-    use super::last_transcript_text;
+    use super::{last_transcript_text, version_label};
     use crate::managers::history::HistoryEntry;
+
+    #[test]
+    fn version_label_uses_murmur_branding() {
+        let label = version_label();
+        assert!(
+            label.starts_with("Murmur v"),
+            "expected Murmur branding, got: {label}"
+        );
+        assert!(!label.contains("Handy"));
+    }
 
     fn build_entry(transcription: &str, post_processed: Option<&str>) -> HistoryEntry {
         HistoryEntry {

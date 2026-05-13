@@ -1,7 +1,9 @@
 {
+  "brand": {
+    "name": "Murmur"
+  },
   "tray": {
     "settings": "Settings...",
-    "checkUpdates": "Check for Updates...",
     "copyLastTranscript": "Copy Last Transcript",
     "unloadModel": "Unload Model",
     "model": "Model",
@@ -524,10 +526,10 @@
         "description": "View source code and contribute",
         "button": "View on GitHub"
       },
-      "supportDevelopment": {
-        "title": "Support Development",
-        "description": "Help us continue building Murmur",
-        "button": "Donate"
+      "fork": {
+        "title": "Fork Attribution",
+        "description": "Murmur is an independent fork of the open-source Handy project.",
+        "details": "Murmur builds on Handy's groundwork and remains a separate project with its own roadmap, releases, and maintainer."
       },
       "acknowledgments": {
         "title": "Acknowledgments",
