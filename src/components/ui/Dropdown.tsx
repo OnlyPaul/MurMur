@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ChevronDown } from "lucide-react";
 
 export interface DropdownOption {
   value: string;
@@ -62,33 +63,23 @@ export const Dropdown: React.FC<DropdownProps> = ({
     <div className={`relative ${className}`} ref={dropdownRef}>
       <button
         type="button"
-        className={`px-2 py-1 text-sm font-semibold bg-mid-gray/10 border border-mid-gray/80 rounded-md min-w-[200px] text-start flex items-center justify-between transition-all duration-150 ${
+        className={`h-9 px-3 text-sm bg-surface-elevated border rounded-[8px] min-w-[200px] text-start flex items-center justify-between gap-2 outline-none transition-[background-color,border-color] duration-[120ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
           disabled
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-logo-primary/10 cursor-pointer hover:border-logo-primary"
+            ? "border-hairline text-ash cursor-not-allowed"
+            : "border-hairline text-ink cursor-pointer hover:bg-surface-card hover:border-hairline-strong focus-visible:border-hairline-strong"
         }`}
         onClick={handleToggle}
         disabled={disabled}
       >
         <span className="truncate">{selectedOption?.label || placeholder}</span>
-        <svg
-          className={`w-4 h-4 ms-2 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        <ChevronDown
+          className={`h-4 w-4 text-mute transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
       {isOpen && !disabled && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-mid-gray/80 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-surface border border-hairline rounded-[10px] z-50 max-h-60 overflow-y-auto py-1">
           {options.length === 0 ? (
-            <div className="px-2 py-1 text-sm text-mid-gray">
+            <div className="px-3 h-8 flex items-center text-sm text-mute">
               {t("common.noOptionsFound")}
             </div>
           ) : (
@@ -96,11 +87,15 @@ export const Dropdown: React.FC<DropdownProps> = ({
               <button
                 key={option.value}
                 type="button"
-                className={`w-full px-2 py-1 text-sm text-start hover:bg-logo-primary/10 transition-colors duration-150 ${
-                  selectedValue === option.value
-                    ? "bg-logo-primary/20 font-semibold"
+                className={`w-full h-8 px-3 text-sm text-start flex items-center transition-colors duration-[120ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                  option.disabled
+                    ? "text-ash cursor-not-allowed"
+                    : "text-ink hover:bg-surface-elevated cursor-pointer"
+                } ${
+                  selectedValue === option.value && !option.disabled
+                    ? "bg-surface-elevated"
                     : ""
-                } ${option.disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                }`}
                 onClick={() => handleSelect(option.value)}
                 disabled={option.disabled}
               >

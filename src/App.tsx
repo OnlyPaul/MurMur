@@ -253,14 +253,17 @@ function App() {
       className="h-screen flex flex-col select-none cursor-default"
     >
       <Toaster
-        theme="system"
+        theme="dark"
         toastOptions={{
           unstyled: true,
           classNames: {
             toast:
-              "bg-background border border-mid-gray/20 rounded-lg shadow-lg px-4 py-3 flex items-center gap-3 text-sm",
-            title: "font-medium",
-            description: "text-mid-gray",
+              "bg-surface-card border border-hairline border-l-[1px] rounded-[10px] px-4 py-3 flex items-start gap-3 text-sm text-body",
+            title: "text-ink text-sm font-medium",
+            description: "text-mute text-sm",
+            error: "border-l-err",
+            success: "border-l-ok",
+            info: "border-l-info",
           },
         }}
       />

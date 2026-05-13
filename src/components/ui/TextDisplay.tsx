@@ -52,10 +52,10 @@ export const TextDisplay: React.FC<TextDisplayProps> = ({
       grouped={grouped}
       layout="stacked"
     >
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-2">
         <div className="flex-1 min-w-0">
           <div
-            className={`px-2 min-h-8 flex items-center bg-mid-gray/10 border border-mid-gray/80 rounded-md text-xs ${textClasses} ${!value ? "opacity-60" : ""}`}
+            className={`px-3 min-h-8 flex items-center bg-surface-elevated border border-hairline rounded-[8px] text-xs ${textClasses} ${value ? "text-ink" : "text-mute"}`}
           >
             {displayValue}
           </div>
@@ -63,25 +63,27 @@ export const TextDisplay: React.FC<TextDisplayProps> = ({
         {copyable && value && (
           <button
             onClick={handleCopy}
-            className="flex items-center justify-center px-2 py-1 w-12 min-h-8 text-xs font-semibold bg-mid-gray/10 hover:bg-logo-primary/10 border border-mid-gray/80 hover:border-logo-primary hover:text-logo-primary rounded-md transition-all duration-150 flex-shrink-0 cursor-pointer"
+            className={`murmur-btn flex items-center justify-center h-8 px-3 text-xs border rounded-[8px] flex-shrink-0 cursor-pointer transition-[background,color,border-color] duration-[120ms] ease-[cubic-bezier(0.4,0,0.2,1)] active:scale-[0.98] ${
+              showCopied
+                ? "bg-surface-elevated border-hairline text-ok"
+                : "bg-surface-elevated border-hairline text-ink hover:bg-surface-card hover:border-hairline-strong"
+            }`}
             title="Copy to clipboard"
           >
             {showCopied ? (
-              <div className="flex items-center space-x-1">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              </div>
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
             ) : (
               "Copy"
             )}
