@@ -44,21 +44,28 @@ pub fn get_current_theme(app: &AppHandle) -> AppTheme {
     }
 }
 
-/// Gets the appropriate icon path for the given theme and state
+/// Gets the appropriate icon path for the given theme and state.
+///
+/// All three states render the same Murmur mark — only the emphasis
+/// (fill opacity / accent tint) changes between Idle, Transcribing, and
+/// Recording. See `scripts/generate-brand-assets.ts` for the pipeline that
+/// produces these PNGs from the canonical SVG mark.
 pub fn get_icon_path(theme: AppTheme, state: TrayIconState) -> &'static str {
     match (theme, state) {
-        // Dark theme uses light icons
+        // Dark UI → light template mark
         (AppTheme::Dark, TrayIconState::Idle) => "resources/tray_idle.png",
         (AppTheme::Dark, TrayIconState::Recording) => "resources/tray_recording.png",
         (AppTheme::Dark, TrayIconState::Transcribing) => "resources/tray_transcribing.png",
-        // Light theme uses dark icons
+        // Light UI → dark template mark
         (AppTheme::Light, TrayIconState::Idle) => "resources/tray_idle_dark.png",
         (AppTheme::Light, TrayIconState::Recording) => "resources/tray_recording_dark.png",
         (AppTheme::Light, TrayIconState::Transcribing) => "resources/tray_transcribing_dark.png",
-        // Colored theme uses pink icons (for Linux)
-        (AppTheme::Colored, TrayIconState::Idle) => "resources/handy.png",
-        (AppTheme::Colored, TrayIconState::Recording) => "resources/recording.png",
-        (AppTheme::Colored, TrayIconState::Transcribing) => "resources/transcribing.png",
+        // Colored variant (Linux) → accent-tinted mark, same emphasis ramp
+        (AppTheme::Colored, TrayIconState::Idle) => "resources/tray_idle_colored.png",
+        (AppTheme::Colored, TrayIconState::Recording) => "resources/tray_recording_colored.png",
+        (AppTheme::Colored, TrayIconState::Transcribing) => {
+            "resources/tray_transcribing_colored.png"
+        }
     }
 }
 
