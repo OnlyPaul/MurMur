@@ -15,6 +15,15 @@ interface ProgressBarProps {
   showLabel?: boolean;
 }
 
+const sizeClasses = {
+  small: "w-16",
+  medium: "w-20",
+  large: "w-24",
+} as const;
+
+const trackClasses =
+  "[&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-bar]:bg-surface-elevated [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-ink [&::-moz-progress-bar]:bg-ink h-[3px]";
+
 const ProgressBar: React.FC<ProgressBarProps> = ({
   progress,
   className = "",
@@ -22,20 +31,11 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   showSpeed = false,
   showLabel = false,
 }) => {
-  const sizeClasses = {
-    small: "w-16 h-1",
-    medium: "w-20 h-1.5",
-    large: "w-24 h-2",
-  };
-
-  const progressClasses = sizeClasses[size];
-
   if (progress.length === 0) {
     return null;
   }
 
   if (progress.length === 1) {
-    // Single progress bar
     const item = progress[0];
     const percentage = Math.max(0, Math.min(100, item.percentage));
 
@@ -44,10 +44,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         <progress
           value={percentage}
           max={100}
-          className={`${progressClasses} [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-bar]:bg-mid-gray/20 [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-logo-primary`}
+          className={`${sizeClasses[size]} ${trackClasses}`}
         />
         {(showSpeed || showLabel) && (
-          <div className="text-xs text-text/60 tabular-nums min-w-fit">
+          <div className="text-xs text-mute tabular-nums min-w-fit">
             {showLabel && item.label && (
               <span className="me-2">{item.label}</span>
             )}
@@ -63,7 +63,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     );
   }
 
-  // Multiple progress bars
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <div className="flex gap-1">
@@ -75,12 +74,12 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
               value={percentage}
               max={100}
               title={item.label || `${percentage}%`}
-              className="w-3 h-1.5 [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-bar]:bg-mid-gray/20 [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-logo-primary"
+              className={`w-3 ${trackClasses}`}
             />
           );
         })}
       </div>
-      <div className="text-xs text-text/60 min-w-fit">
+      <div className="text-xs text-mute min-w-fit">
         {progress.length} downloading...
       </div>
     </div>

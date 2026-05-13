@@ -1,4 +1,5 @@
 import React from "react";
+import { Loader2 } from "lucide-react";
 import { SettingContainer } from "./SettingContainer";
 
 interface ToggleSwitchProps {
@@ -24,6 +25,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   grouped = false,
   tooltipPosition = "top",
 }) => {
+  const interactionDisabled = disabled || isUpdating;
   return (
     <SettingContainer
       title={label}
@@ -33,24 +35,26 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       disabled={disabled}
       tooltipPosition={tooltipPosition}
     >
-      <label
-        className={`inline-flex items-center ${disabled || isUpdating ? "cursor-not-allowed" : "cursor-pointer"}`}
-      >
-        <input
-          type="checkbox"
-          value=""
-          className="sr-only peer"
-          checked={checked}
-          disabled={disabled || isUpdating}
-          onChange={(e) => onChange(e.target.checked)}
-        />
-        <div className="relative w-11 h-6 bg-mid-gray/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-logo-primary rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-background-ui peer-disabled:opacity-50"></div>
-      </label>
-      {isUpdating && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-4 h-4 border-2 border-logo-primary border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
+      <div className="relative inline-flex items-center">
+        <button
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          aria-label={label}
+          disabled={interactionDisabled}
+          onClick={() => onChange(!checked)}
+          className={`murmur-toggle ${checked ? "is-on" : ""} ${
+            interactionDisabled ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
+        >
+          <span className="murmur-toggle__thumb" aria-hidden="true" />
+        </button>
+        {isUpdating && (
+          <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <Loader2 className="h-3 w-3 animate-spin text-mute" />
+          </span>
+        )}
+      </div>
     </SettingContainer>
   );
 };

@@ -20,8 +20,11 @@
   --color-signal-soft: rgba(240, 184, 120, 0.16);
   --color-signal-pressed: #d8a262;
   --color-ok: #6fcf9c;
+  --color-ok-soft: rgba(111, 207, 156, 0.16);
   --color-err: #ff7a7a;
+  --color-err-soft: rgba(255, 122, 122, 0.16);
   --color-info: #7ec0ff;
+  --color-info-soft: rgba(126, 192, 255, 0.16);
   --color-primary: #ffffff;
   --color-on-primary: #000000;
 
@@ -98,6 +101,64 @@
 @layer utilities {
   .text-stroke {
     -webkit-text-stroke: 2px var(--color-text-stroke);
+  }
+}
+
+/* Murmur range input — 4px track, ink fill (set inline via gradient on the
+   element), 14px ink thumb with hairline ring. */
+.murmur-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 9999px;
+  border: 1px solid var(--hairline);
+  background: var(--surface-elevated);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 120ms var(--ease);
+}
+.murmur-range:hover,
+.murmur-range:focus-visible {
+  border-color: var(--hairline-strong);
+}
+.murmur-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--ink);
+  border: 1px solid var(--hairline);
+  cursor: pointer;
+  transition: border-color 120ms var(--ease);
+}
+.murmur-range:hover::-webkit-slider-thumb,
+.murmur-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--hairline-strong);
+}
+.murmur-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--ink);
+  border: 1px solid var(--hairline);
+  cursor: pointer;
+}
+.murmur-range:disabled {
+  cursor: not-allowed;
+}
+.murmur-range:disabled::-webkit-slider-thumb {
+  background: var(--ash);
+}
+
+/* Murmur indeterminate progress sweep — 1.2s ease-in-out. */
+@keyframes murmur-progress-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
   }
 }
 

@@ -6,20 +6,20 @@ interface BadgeProps {
   className?: string;
 }
 
+const variantClasses: Record<NonNullable<BadgeProps["variant"]>, string> = {
+  primary: "bg-surface-elevated border-hairline text-ink",
+  secondary: "bg-surface border-hairline text-body",
+  success: "bg-ok-soft border-hairline text-ok",
+};
+
 const Badge: React.FC<BadgeProps> = ({
   children,
   variant = "primary",
   className = "",
 }) => {
-  const variantClasses = {
-    primary: "bg-logo-primary",
-    success: "bg-green-500/20 text-green-400",
-    secondary: "bg-mid-gray/20 text-text/70",
-  };
-
   return (
     <span
-      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${variantClasses[variant]} ${className}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded-[4px] border text-[11px] font-medium leading-tight ${variantClasses[variant]} ${className}`}
     >
       {children}
     </span>
